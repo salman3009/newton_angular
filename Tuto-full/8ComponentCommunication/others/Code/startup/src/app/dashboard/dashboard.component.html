@@ -1,0 +1,68 @@
+<h1>Welcome to Startup</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-4">
+       {{fullName}}
+        </div>
+        <div class="col-4">
+        {{age}}
+        </div>
+        <div class="col-4">
+       {{flag}}
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <img [src]="imgTag"/>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="form-group">
+                <label for="email">Email address:</label>
+                <input type="text" class="form-control" id="email" name="emailAddress" [(ngModel)]="emailAddress">
+              </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            {{emailAddress}}
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <button (click)="onSubmit()"type="button" class="btn btn-primary btn-lg">Large</button>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="flag" class="container">
+    <div class="row">
+       
+        <h1>The button is clicked</h1>
+    </div>
+</div>
+
+
+<span *ngIf="welcomeFlag;then firstTemplate;else secondTemplate">
+</span>
+ <ng-template #firstTemplate>
+    <span>First Template</span>
+  </ng-template>
+ 
+  <ng-template #secondTemplate>
+      <span>Second template</span>
+  </ng-template>
+
+
+

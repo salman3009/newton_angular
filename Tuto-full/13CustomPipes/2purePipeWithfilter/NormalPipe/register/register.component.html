@@ -1,0 +1,93 @@
+<nav class="navbar bg-dark">
+  <h1>
+    <a routerLink="/"><i class="fas fa-code"></i> DeveloperConnect</a>
+  </h1>
+  <ul>
+    <li><a routerLink="">Login</a></li>
+  </ul>
+</nav>
+
+<section class="container">
+    <h1 class="large text-primary">Sign Up</h1>
+    <p class="lead"><i class="fas fa-user"></i> Create Your Account</p>
+    <form [formGroup]="signUpForm"  (ngSubmit)="onSubmitClick()" class="form" >
+      <div class="form-group">
+        <input type="text" placeholder="Name" name="name" formControlName="username"/>
+      </div>
+      <div class="form-group">
+        <input
+          type="password"
+          placeholder="Password"
+          formControlName="password"
+          name="password"
+        />
+      </div>
+      <div class="form-group form-row">
+        <label class="col-md-4 col-form-label">Gender:</label>
+        <div class="col-md-8">
+
+          <div class="form-check-label form-check-inline">
+            <input type="radio" name="gender" id="male" value="male" class="form-check-input" formControlName="gender">
+            <label for="male" class="form-check-label">Male</label>
+          </div>
+
+          <div class="form-check-label form-check-inline">
+            <input type="radio" name="gender" id="female" value="female" class="form-check-input" formControlName="gender">
+            <label for="female" class="form-check-label">Female</label>
+          </div>
+
+        </div>
+      </div>
+      <div class="form-group form-row">
+        <label for="countryID" class="col-md-4 col-form-label">Country:</label>
+        <div class="col-md-8">
+          <select name="countryID" id="countryID" class="form-control" formControlName="countryID">
+            <option value="null">Please Select</option>
+            <option *ngFor="let country of countries" [value]="country.countryID">
+              {{country.countryName}}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group form-row">
+        <label class="col-md-4 col-form-label">Skills:</label>
+        <div class="col-md-8" formArrayName="skills">
+          <div class="row" *ngFor="let skill of signUpForm.get('skills')['controls']; let i = index" [formGroupName]="i">
+            
+            <div class="col-5">
+              <input type="text" name="skillName" id="skillName" placeholder="Skill Name" formControlName="skillName" class="form-control">
+            </div>
+
+            <div class="col-4">
+              <select name="level" id="level" formControlName="level" class="form-control">
+                <option value="null">Please Select</option>
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Professional">Professional</option>
+                <option value="Expert">Expert</option>
+              </select>
+            </div>
+
+            <div class="col-3">
+              <button class="btn btn-danger" type="button" (click)="onRemoveClick(i)">Remove</button>
+            </div>
+          </div>
+
+          <button class="btn btn-primary" type="button" (click)="onAddSkill()">Add Skill</button>
+        </div>
+
+        
+      </div>
+      <div class="form-group form-row">
+        <label class="col-md-4 col-form-label"></label>
+        <div class="col-md-8">
+          <input type="checkbox" name="receiveNewsLetters" id="receiveNewsLetters" value="true" class="form-check-input" formControlName="receiveNewsLetters">
+          <label for="receiveNewsLetters" class="form-check-label">Receive News Letters</label>
+        </div>
+      </div>
+      <input type="submit" class="btn btn-primary" value="Register" />
+    </form>
+    <p class="my-1">
+      Already have an account? <a href="login.html">Sign In</a>
+    </p>
+  </section>

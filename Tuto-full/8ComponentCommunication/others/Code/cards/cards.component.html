@@ -1,0 +1,47 @@
+<br>
+<table>
+  <th>S.no</th>
+  <th>Name</th>
+  <th>Button</th>
+  <tr>
+    <td>1</td>
+    <td>
+        <form>
+            <input type="text" name="ddd"  [(ngModel)]="carName">
+          </form>
+    </td>
+    <td>
+        <button (click)="selectionCar()">Click here</button>
+    </td>
+  </tr>
+</table>
+
+
+
+<div class="container">
+  <div class="row">
+    
+    <div class="col-2">
+
+    </div>
+    <div class="col-8">
+      <img [width]="width" [height]="height" [src]="imgTag"/>
+    </div>
+    <div class="col-2">
+
+    </div>
+  </div>
+
+  <div class="row">
+    
+    <div class="col-5">
+
+    </div>
+    <div class="col-2">
+    <button *ngIf="flag">Proceed to Pay</button>  
+    </div>
+    <div class="col-5">
+
+    </div>
+  </div>
+</div>

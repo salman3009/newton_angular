@@ -1,0 +1,64 @@
+
+<div>
+  
+</div>
+ <div [ngSwitch]="dietSelection">
+  <p *ngSwitchCase="'sf'">sugar-free</p>
+  <p *ngSwitchCase="'veg'">Vegetable</p>
+  <p *ngSwitchCase="'paleo'">bread</p>
+  <p *ngSwitchDefault>Standard diet</p>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-3">
+      <div class="form-group">
+        <label for="email">First Name:</label>
+        <input type="text" class="form-control" id="firstname" name="firstname" [(ngModel)]="firstName">
+      </div>
+    </div>
+    <div class="col-3">
+      <div class="form-group">
+        <label for="email">Email address:</label>
+        <input type="text" class="form-control" id="email" name="emailAddress" [(ngModel)]="emailAddress">
+      </div>
+    </div>
+    <div class="col-3">
+      <div class="form-group">
+        <label for="email">{{Contact | lowercase}}:</label>
+        <input type="text" class="form-control" id="contact" name="contact" [(ngModel)]="contact">
+      </div>
+    </div>
+    <div class="col-3">
+      <button (click)="onSubmit()"type="button" class="btn btn-primary btn-lg">Submit</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="container">
+  <table class="table table-bordered">
+  
+      <tr>
+        <th>Firstname</th>
+        <th>Email</th>
+        <th>Contact</th>
+        <th>Delete</th>
+        <th>Update</th>
+      </tr>
+   
+  
+      <tr *ngFor="let i of globalData;let j=index">
+        <td [style.color]="i.firstName=='salman'?'blue':'orange'">{{i.firstName}}</td>
+        <td [ngClass]="(j==1)?'show':''">{{i.email}}</td>
+        <td>{{i.contact}}</td>
+        <td>
+          <button (click)="onDelete(j)"type="button" class="btn btn-primary btn-lg">Delete</button>
+        </td>
+        <td>
+          <button (click)="onUpdate(j)"type="button" class="btn btn-primary btn-lg">Update</button>
+        </td>
+      </tr>
+  
+  </table>
+</div>

@@ -1,0 +1,9 @@
+angular 11
+  <!-- <div *ngIf="password.invalid && password.errors?.required" class="alert alert-danger">
+    Password cannot be empty
+  </div> -->
+//angular 13 
+  //angular 13 
+  <!-- <div *ngIf="password.invalid && password.errors?.['required']" class="alert alert-danger">
+    Password cannot be empty
+  </div> -->

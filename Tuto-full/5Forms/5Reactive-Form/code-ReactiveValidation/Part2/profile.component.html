@@ -1,0 +1,124 @@
+<section class="container">
+    <h1 class="large text-primary">
+      Create Your Profile
+    </h1>
+    <p class="lead">
+      <i class="fas fa-user"></i> Let's get some information to make your
+      profile stand out
+    </p>
+    <small>* = required field</small>
+    <form class="form" [formGroup]="registerForm" (ngSubmit)="onSubmitHandler()">
+      <div class="form-group">
+        <select name="status" formControlName="profession" >
+            <option *ngFor="let obj of list" [value]="obj.value">{{obj.keyword}}</option>
+        </select>
+        <small class="form-text"
+          >Give us an idea of where you are at in your career</small
+        >
+      </div>
+      <div class="form-group">
+        <input type="text" formControlName="company" placeholder="Company" name="company" />
+        <small class="form-text"
+          >Could be your own company or one you work for</small
+        >
+        <div *ngIf="f.company.errors?.required">company is required</div>
+        <div *ngIf="f.company.errors?.minlength">minLength is required</div>
+        <div *ngIf="f.company.errors?.maxlength">maxLength is required</div>
+        <div *ngIf="f.company.errors?.pattern">Pattern is required</div>
+      </div>
+      <div class="form-group">
+        <input type="text" formControlName="website" placeholder="Website" name="website" />
+        <small class="form-text"
+          >Could be your own or a company website</small
+        >
+      </div>
+      <div class="form-group">
+        <input type="text" formControlName="location" placeholder="Location" name="location" />
+        <small class="form-text"
+          >City & state suggested (eg. Boston, MA)</small
+        >
+      </div>
+      <!-- <div class="form-group" formArrayName="skills" >
+        <div *ngFor="let obj of registerForm.get('skills')['controls'];let i=index" [formGroupName]="i">
+          <input type="text" style="width:10%;display: inline;"  formControlName="skillName" placeholder="* Skills" name="skills" />
+          <button type="button" (click)="onRemoveSkillHandler(i)" class="btn btn-light">
+            -
+          </button>
+        </div>
+        <button type="button" (click)="onAddSkillHandler()" class="btn btn-light">
+          +
+        </button>
+
+      </div> -->
+      <div class="form-group" formArrayName="skills">
+        <div *ngFor="let obj of userFormGroups.controls;let i=index">
+          <div [formGroupName]="i">
+            <input  type="text" style="width:10%;display:inline" formControlName="skillName" placeholder="* Skills" name="skills" />
+            <a class="btn btn-light my-1" (click)="onRemoveSkill(i)">-</a>
+          </div>
+        </div>
+      
+        <small class="form-text"
+          >Please use comma separated values (eg.
+          HTML,CSS,JavaScript,PHP)</small
+        >
+        <a class="btn btn-light my-1" (click)="onAddSkill()">+</a>
+      </div>
+      <div class="form-group">
+        <input
+          type="text"
+          formControlName="github"
+          placeholder="Github Username"
+          name="githubusername"
+        />
+        <small class="form-text"
+          >If you want your latest repos and a Github link, include your
+          username</small
+        >
+      </div>
+      <div class="form-group">
+        <textarea formControlName="bio" placeholder="A short bio of yourself" name="bio"></textarea>
+        <small class="form-text">Tell us a little about yourself</small>
+      </div>
+
+      <div >
+        <div class="my-2">
+          <button type="button" (click)="onSocialHandler()" class="btn btn-light">
+            Add Social Network Links
+          </button>
+          <span>Optional</span>
+        </div>
+     
+        <div *ngIf="socialNetwork">
+          <div class="form-group social-input" formGroupName="social">
+            <i class="fab fa-twitter fa-2x"></i>
+            <input type="text" formControlName="twitter" placeholder="Twitter URL" name="twitter" />
+          </div>
+    
+          <div class="form-group social-input" formGroupName="social">
+            <i class="fab fa-facebook fa-2x"></i>
+            <input type="text"  formControlName="facebook" placeholder="Facebook URL" name="facebook" />
+          </div>
+    
+          <div class="form-group social-input" formGroupName="social">
+            <i class="fab fa-youtube fa-2x"></i>
+            <input type="text"  formControlName="youtube" placeholder="YouTube URL" name="youtube" />
+          </div>
+    
+          <div class="form-group social-input" formGroupName="social">
+            <i class="fab fa-linkedin fa-2x"></i>
+            <input type="text"  formControlName="linkedin" placeholder="Linkedin URL" name="linkedin" />
+          </div>
+    
+          <div class="form-group social-input" formGroupName="social">
+            <i class="fab fa-instagram fa-2x"></i>
+            <input type="text" formControlName="instagram"  placeholder="Instagram URL" name="instagram" />
+          </div>
+        </div>
+        
+        </div>
+      
+      <input type="submit" class="btn btn-primary my-1" />
+      <a class="btn btn-light my-1" href="dashboard.html">Go Back</a>
+    </form>
+  </section>

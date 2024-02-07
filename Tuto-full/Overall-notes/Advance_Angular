@@ -1,0 +1,1249 @@
+What is angular?
+//Client side framework to create web applications.
+//Developed by Google.
+//Angular 2+ is called as Angular
+//Based on TypeScript.
+//TypeScript is a superset of JavaScript
+Goals:
+(i)Separation of DOM manipulation from application logic.
+//DOM manipulation means updating the user interface. For example new 
+data is coming from server.So page should be updated. This is called DOM manipulation.
+(ii)Separation of HTML Logic from application Logic.
+//HTML is written in template and application logic is written in component.
+(iii)Make SPA developer easier.
+(iv)Separation of business logic from application logic.
+//Business logic means code for Ajax,calculation or decision making or any kind of processing the data
+is called business logic.
+//Business Logic is written in services.Services are reusable.
+//Application logic means how to manipulate the user interface,How to 
+read and update the user interface.
+
+//Angular application are highly unit testable.
+//Unit testing framework such as jasmine,karma etc...
+
+Angular 2 TypeScript based not MVC based but component based.
+Features:
+(i)Data Bindings(to update user interface)
+(ii)Modules(separate the group of components into one group)
+(iii)Directives
+(iv)Services
+(v)pipes
+(vi)Routing
+(vii)Unit testing
+
+In JavaScript we have to use prototype based object oriented programming. 
+In TypeScript we have Class based object oriented programming
+//In prototype based programming we can create object directly without class.
+//In Class based programming first we have to create class. Based on the class
+only,We have to create object.
+
+//In Angular 2 we use only TypeScript not JavaScript.
+//We have Angular 2,4,5,6 faster and improved Ajax.
+
+Course Modules:
+//TypeScript
+//Basics
+//Components & templates
+//Data Bindings
+//Forms & Validations
+//Child Management
+//Styles manipulation
+//Built-in & custom Directives
+//Services
+//ngFor
+//Life Cycle Hooks
+//Built-in & Custom pipes
+//Routing & Guards
+//Deployment
+//Ajax
+//Interceptors
+//Rxjs
+//Unit testing
+//Animations
+//Angular Material Design
+------------------------------------------------------------------------------------------------
+INTRODUCTION TO TYPESCRIPT:
+
+Problems in JavaScript?
+//No Static Typing & No Type safety
+Example: var a=3;
+//In above example there is no fixation of datatype.
+//Less Intellisense support
+//No classes,Interfaces,Modules
+
+Introduction to TypeScript
+//TypeScript is a programming language, whic is a superset of
+javascript,which adds data types,static typing,classed,interfaces and
+other concepts of JavaScript.
+
+JavaScript Concepts:
+(i)Variables
+(ii)Operators
+(iii)Control Statements
+(iv)DOM Manipulations
+(v)String&Date Functions
+(vi)Validations
+(vii)Objects
+TypeSScript Concepts:
+(i)Data Types&Static Typing
+(ii)classes
+(iii)Interfaces
+(iv)Modules
+(v)Other Concepts
+
+FEATRUES OF TYPESCRIPT
+//Server side programing like-experience
+//superset of JavaScript
+//Can't run direclty on browser;must be compiled into JavaScript
+filename.ts->"tsc" compiler->filename.js
+//Static Typing & Type Safety is optional(development time error example var x:number='a')
+//Intellisense in IDE: visual studio code,Eclipse,Sublime text etc.
+//Coding time Errors Identification
+------------------------------------------------------------------------------------------------------
+SETTING UP ENVIRONMENT FOR TYPESCRIPT
+//Install Nodejs
+Reason of Nodejs
+//Through Nodejs only we can use npm. Through npm only we can use angular packages
+//Install Visual Studio code
+------------------------------------------------------------------------------------
+INSTALLING TYPESCRIPT packages
+ CMD:inpm install typescript -group
+ --------------------------------------------------------------------------------------
+ STEPS TO PREPARE FIRST APP IN TYPESCRIPT
+ //Open visual studio code
+ Code:
+ var a:number=10;
+ var b:string="Hello";
+ var c:any={firstname:"Adam",lastname:"Smith"};
+ console.log(a);
+ console.log(b);
+ console.log(c);
+ filename:hello.ts
+ cmd:tsc hello.ts
+ //You cannot run directly typescript. It has to converted into javascript
+ //You cannot run directly javascript in browser. You need html file to invoke the javascript file
+ Code:
+ <html>
+ <head>
+ <title>TypeScript</title>
+ </head>
+ <body>
+ <h4>Hello</h4>
+ <script src="first.js"></script>
+ </body>
+ </html>
+ -------------------------------------------------------------------------------------
+INTRODUCTION TO OOP & CREATING CLASSES AND Objects
+(i)Object and Class
+Object:Represent a physical item(person or product),which is a
+collection of properties(details) and methods (manipulations).
+Example:
+details-->name,color,gender
+method or operation or activities-->walk,run,sleep,listen,speak
+//If there are three people. We have to create three objects for them.
+//Person is common type. So person is a class
+
+Class:Represents a model of object, which defines list of properties and methods of the
+object.
+
+Example:
+class classname
+{
+property:datatype;
+method(datatype parameter):return type
+{
+    code here
+}
+}
+//methods will have parameters or arguments.
+//return type can be string,integer,boolean.
+//methods can have parameters without parameter is also possible.
+//returntype is optional
+
+//Refer :1DemoClass.ts
+
+//Constructor used to initialize the object.
+
+---------------------------------------------------------------------------------------------------------------------
+Constructor:
+//Constructor special type of Function.
+//Constructor gets called automatically when a new object is created for the class
+//Constructor contains initialization logic of the object.
+//Constructor can receive the arguments.But cannot return any value
+//Constructor is automatically called. Whenever new object is created.
+//Constructor will be executed once in a life time
+//Constructor can store initial values into properties of an object.
+Example:
+new classname();
+Object:
+property1=undefined
+property2=undefined
+method(){}
+method2(){}
+constructor:
+constructor()
+{
+this.property1=value1;
+this.property2=value2;   
+}
+//If you open the bank account. The initial value is zero.
+
+TYPES OF CONSTRUCTORS
+(i)Parameterless Constructor
+//Constructor without parameters(arguments)
+example:IF bank have initial deposit of 500.
+(ii)Parameterized Constructor
+//Constructor with parameters(arguments)
+example:Your own deposit
+
+
+//In typescript you cannot have multiple constructor at the same time
+//Function overloading is not possible.
+
+//Refer constructor code.
+
+//Alternative for method overloading
+Example:
+constructor(studentId:number=0,studentName:string="sallu",feePaid:boolean=true,gpa:number=0,marks:number=0){
+    this.studentId=studentId;
+    this.studentName=studentName;
+    this.feePaid=feePaid;
+    this.gpa=gpa;
+    this.marks=marks;
+}
+var s3=new Student();
+-------------------------------------------------------------------------------------------------------------------------
+INHERITANCE
+//Inheritance is a concept of creating "parent-child relationship" among two or more classes.
+//Inheritance is a concept of extending the parent class, by creating child class.
+//Child class's object contains all the properties and methods of both child class and parent class too.
+Example:
+class parentclass
+{
+    parentclassproperty:datatype
+    parentclassmethod()
+    {
+
+    }
+}
+
+class childclass extends parentclass
+{
+childclassproperty:datatype
+childclassmethod()
+{
+}
+}
+
+TYPES OF INHERITANCE
+(i)Single Inheritance
+//One parent class with one child class
+(ii)Multiple Inheritance
+//Multiple parent class with one child class
+(iii)Hierachical Inheritance
+//one parent class with multipe child class
+(iv)Multi Level Inheritance
+//parenttochildtochild
+(v)Hybrid Inheritance
+//Combination of any two types of Inheritance
+---------------------------------------------------------------------------------------------------------------------------
+METHOD OVERRIDING:
+//The process of hiding/shadowing parent class's method,by creating another method in the child class with same name and 
+same parameters is called as "method overriding"
+Example:
+class parentclass{
+    methodname(parameter:datatype)
+    {
+
+    }
+}
+
+class childclass extends parentclass
+{
+    methodname(parameter:datatype)
+    {
+
+    }
+}
+//If object is created for parent class. Then parent class method will executed
+//If object is created for child class. Then child class method will executed
+//There is possibility of invoking parent class method explicitly from child class using "super.methodname".
+---------------------------------------------------------------------------------------------------------------------------
+ACCESS MODIFIERS:
+//Access Modifiers specify where the member(property/method)of a class can be accessible / where it is not accessible.
+TypeScript Access Modifiers:
+(i)public(default):Accessible everywhere
+(ii)private:Accessible within the same class only;not in other classes.
+(iii)protected:Accessible within the same class & its child classes only.
+Example:
+Current Class:
+public members
+private members
+protected members
+
+child class:
+public members
+protected members
+
+other class:
+public members
+-------------------------------------------------------------------------------------------------------------------------------
+INTERFACES:
+//Interface specify the "blue print" of a class, which describes list of properties and methods of a class, without implementation
+//Class implements interface and provides the definition for interface methods.
+//one class can implement multiple interface. It is called as multiple Inheritance.
+//So multiple inheritance is possible only with interfaces
+//one interface can implement multipe class.
+Example:
+interface interfacename
+{
+property:datatype
+method():returntype
+}
+class classname implements interfacename{
+    property:datatype
+    //same property name and method define in the interface has to be used here
+    method():returntype{
+
+    }
+}
+
+//Vehicle is a interface. wheel is an method. so for each class wheel value will be different
+
+Practical Use of Interfaces
+"Programmer 1" creates child class by implementing
+"Programmer 2"creates a reference variable for the interface create object for the child class and call the method
+"Advantage"we have clarity about the list of properties and methods of the object, while calling.
+Example:
+interface interfacename{
+    property:datatype;
+    method():returntype;
+}
+
+class:
+child classname implements interfacename{
+    property:datatype;
+    method():returntype
+    {
+
+    }
+}
+
+Object:
+interfacename referencevariable;
+referencevariable = new childclassname();
+referencevariable.property;
+referencevariable.method();
+
+
+//No access Modifiers is allowed for interface
+//When interface is implemented in class. Then all class should have public access Modifiers
+---------------------------------------------------------------------------------------------------------------------------
+CREATING FIRST APP IN ANGUALR:
+1.Installing Nodejs(npm)
+//Needed to use "npm"
+//"npm"(Nodejs Package Manager)is used to download all packages of angular framework
+2.Installing TypeScript
+//Needed to complie "typescript files" to "javascript files"
+3.Installing Visual Studio code
+//Code Editor to edit the code.
+4.Installing Angular Cli
+//Angular CLI(command line interface)provides necessary commands to create,compile,serve(execute),test and deploy angular applications.
+5.Creating Application folder structure
+6.Edit Application code
+7.Run the application
+
+//All the angular package are download from npmjs.coming
+
+//For running angular in browser four files are important
+(i)main.js
+(ii)polyfills.js
+(iii)runtime.js
+(iv)styles.js
+(v)vendor.js
+------------------------------------------------------------------------------------------------------------------------------
+INTRO TO BUILDING BLOCKS OF ANGULAR & ANGULAR ARCHITECTURE
+Building Blocks of Angular:
+(i)Component: Application State + Application logic
+(ii)Metadata:Details about the component/Modules
+(iii)Template:Design logic(HTML)
+(iv)Data Binding:Connection between "HTML Element" and "component Property"
+(v)Module:Group of components,directives and pipes
+(vi)Service:Re-usable code/business logic
+(vii)Dependency Injection:Injecting(loading)Service objects into Components
+(viii)Directive:Manipulating DOM elements
+(ix)Pipe:Transforming values to print.
+
+Angular ARCHITECTURE
+Module
+   Metdata-->Component<----(Dependency Injection)---Service
+               |
+            Data Binding
+               |
+            Template<-----Directive
+                          Pipe
+-------------------------------------------------------------------------------------------------------------------------
+FOLDER STRUCTURE OF ANGULAR APP:
+(i)e2e: Contains "end-to-end" test cases.
+(ii)src: Contains source code of the application.
+    (i)app
+         (i)app.component.css:Contains CSS styles of AppComponent
+         (ii)app.component.html:Contains template of AppComponent
+         (iii)app.component.spec.ts:Contains test cases of AppComponent
+         (iv)app.component.ts:Contains AppComponent
+         (v)app.module.ts:Contains AppModule
+    (ii)assets:this file will not be compiled but it will be added to the build.
+    (iii)favicon.ico:contains browser icon
+    (iv)index.html:Default page/startup page
+    (v)main.ts:Defines startup Module(AppModule)
+    (vi)polyfills.ts:Defines polyfills(additional scripts) needed to load to run app.Example:rxjs..
+    (vii)styles.css:Contain global CSS styles of entire app.
+(iii)angular.json:Contains Angular CLI configuration.
+(iv)package.json:Defines current app(package)details and its dependencies.
+------------------------------------------------------------------------------------------------------------------------
+INTRODUCTION TO ANGULAR PACKAGES:
+//What is Package?
+//Package is a folder, which is a collecion of files
+//Responsible to do some specific operation
+//Generally represents re-usable code
+//Can be uploaded into "npm server"
+npm=[nodejs package manager]
+//Can be downloaded into developer machine using "npm client"
+
+Packages required by Angular App?
+1.@angular/cli
+2.@angular/core 
+3.@angular/common
+4.@angular/compiler
+5.@angular/platform-browser-dynamic
+6.@angular/platform-browser
+7.@angular/forms
+8.@angular/router
+9.@angular/Animations
+10.typescript
+11.core-js
+12.rxjs
+13.zone.js
+14.jasmine
+15.karma
+16.protractor
+
+1.@anglar/cli 
+//Commands to create,compile,serve(execute),test and deploy angular applications
+Example:ng new,ng g,ng serve,ng build,ng test
+//Needed only on the developer machine
+
+2.@angular/core
+//Decorators to create items:@Component,@NgModule,@Pipe,@Directive.
+//Decorators for Dependency Injection:@Injectable,@Inject.
+//Decorators for child Manipulation:@ContentChild,@ContentChildren,@ViewChild,@ViewChildren.
+//Classes for Angular Zones Manipulation:NgZone.
+//Interface for Component Life Cycle:OnChanges,OnInit,DoCheck,AfterContentInit,AfterContentChecked,AfterViewInit,AfterViewChecked,OnDestroy.
+//ApplicationModule:Contains necessary scripts needed to run components
+
+3.@angular/common
+//Common Module
+     (i)Built-in directives:ngIf,ngSwitch,ngFor,ngClass etc.
+     (ii)Built-in pipes:uppercase,lowercase,number,currency etc.
+//HttpClientModule:Contains necessary scripts needed to run AJAX.
+ 
+4.@angular/compiler
+//"Angular's Template Compiler",which compiles "templates(html)" into equivlent "JavaScript code",which can render the same content as template
+//Compilation is needed to make htmlDOM as "dynamic"
+//This package will not be accessed by the developer direclty;always will be accessed by the developer,by using "@angular/platform-browser-dynamic".
+
+Types of Compilation
+1.JIT Compilation(Just-In-Time)
+2.AOT Compilation(Ahead-Of-Time)
+
+JIT Compilation(Just-In_Time)
+(i)Templates will be compiled into JavaScript code in the browser[automatically],exactly when the component is invoked for the first time.
+(ii)The template(html)and compiler-scripts also will be loaded into the browser.
+(iii)Slower performance because compilation happens every time when we run the app in the browser
+(iv)But the developer need not perform compilation manually for every single modification;So it's very comfortable for developer during development
+(v)Suitable for Development-time
+
+AOT Compilation(Ahead-Of-Time)
+(i)Templates will be compiled into JavaScript code in the command prompt[by the developer].
+(ii)The compiled template(javascript)only will be loaded into the browser;compilation need not be performed in the browser.
+(iii)Compiler-Scripts need not be loaded into the browser and compilation process need not occur in the browser;so performance will be improved in the browser
+(iv)Compilation needs to be done by the developer manually;so it's not suitable for development-time
+(v)Suitable for Production-time
+
+
+5.@angular/platform-browser-dynamic 
+//Methods to compile the app on the browser[JIT Compilation].
+//Methods to start executing the application[Loading the "Startup Module"i.e"AppModule"]. in case of JIT Compilation
+
+6.@angular/platform-browser
+//browserModule:Contains necessary scripts needed to run angular apps in browser. It includes DOM manipulation related code.
+//Methods to start executing the application[Loading the "Startup Module" i.e "AppModule"].in case of AOT compilation.
+
+7.@angular/forms
+//FormsModule:Contains necessary scripts needed to run template-driven forms.
+ (i)Built-in directives for Template Driven Forms:ngModel,ngForm
+//ReactiveFormsModule:Contains necessary scripts needed to run reactive forms
+ (i)Built-in directives for Reactive Forms:formGroup,formControlName
+ (ii)Built-in classes for Validations in Reactive Forms:Validators
+
+8.@angular/router
+//RouterModule:Contains necessary scripts needed to run page navigation based on the URL changes.
+//Built-in interfaces for routing:Routes,ActivatedRoute,ActivatdRouteSnapshot,CanActivate,CanDeactivate,CanDeactivateChild
+//Build-in directives for routing:routerLink
+
+9.@angular/Animations
+//Built-in functions to define animations:animate,state,style,transition etc.
+//BrowserAnimationsModule:Contains necessary scripts needed to run animations in the browser
+
+10.typescript package
+//TypeScript Compiler:To compile "Typescript files" to "javascript files".
+
+11.core-js
+//Polyfills:To run angular apps in IE9+
+
+12.rxjs
+//Observable:To run ajax in browser.
+//supports "Observable-Observer" pattern.
+//Observable can pass data packets to observer.
+
+13.zone.js
+//Angular Zones:Angular relies on zone.js to run "Angular's change detection process",when native JavaScript raises events
+(click,dbclick,keyup,alert,confirm,setTimeout,setInterval)
+
+14.jasmine package
+//Necessary scripts to define Unit test cases for angular apps.
+
+15.karma package
+//Necessary scripts to run test cases in the browser and get test results
+
+16.protractor package
+//Necessary scripts to create and run "end-to-end" test cases for angular apps.
+--------------------------------------------------------------------------------------------------------------------------------
+INTRODUCTION TO COMPONENTS:
+//Components is a class that represents a specific section of the page.
+//Component will not contain HTML logic. But componenent is class which contain programming logic.
+//Inside component you will have properties and methods.
+
+COMPONENT HIERARCHY:
+//Every page contains its own Hierachy of component.
+Example:
+First level page-->AppComponent
+Second level productList-->ProductsListComponent
+Third level ProductComponent-->ProductComponent
+//If you see code it is independent.But during run time it will work together.
+//The template of one component can invoke one or more child components.
+//This type of component based approach helps in reusable,testing,easy to change.
+
+Metadata of Components:
+//Metadata specifies additional details about the specific component.
+//Metadata is an object.
+Example:templateUrl,styleUrls.
+//Name extension for html be like"name.component.html". But component is optional.
+//Name extension for css be like "name.comonent.css". But component is optional.
+//To make the class into component. We need to add @decorator.
+example:
+@Component({
+
+})
+//Always component need html file. Without html file it cannot be created.
+//We have several builtin block like directives,pipes,services.
+//we have different class like module,service,component.directive,pipe.
+//To identify differen class we need decorator.
+//Decorator specify that particular class you are using is component or etc.
+//Inside the component object is called metadata example:templateUrl,styleUrls,selector.
+//'./' refer to current working file.
+//'../'refer to parent folder
+//'childfoldername/filename' refer to child folder.
+//Component must be called from 'index.html'.
+//To invoke html component we have to give tagname 'selector:"tagName".
+//we can create multiple css file for the same component.
+//automatically angular will create object for component class.
+//Once object is initialize it will go to constructor function.
+//DOM manipulation will done by angular automatically.
+//'setTimeout()' is run once.
+//'setInterval()' it will continually repeat the loop.
+
+
+INTRODUCTION TO DATA BINDING:
+//It is used to project data to the user and used to accept data from the user
+//The relationship between component property and html element.
+//Whenever value of one side is change it automatically update on other side at any moment.
+//Data binding helps angular for DOM manipulation.
+
+Types of Data Binding
+(i)Interpolation Bindings -{{}}
+(ii)Propery Binding-[]
+(iii)Event Binding-()
+(iv)Two-way-Binding -[()]
+
+
+(i)Interpolation Bindings
+//Reads the data from the component and display the same in template
+//dynamically it will change.
+//It is component to template change but not reverse.
+Example:
+export class AppComponent{
+
+    message:string="hello world":
+}
+app.html
+<h1>Say {{message}}</h1>
+//Change detection process helps to change the value dynamically whenever we change in component.
+
+(ii)Property Binding
+//Read the data from component and assign the value to html attribute tag.
+Syntax:
+Component
+property:datatype
+Template
+<tag [attribute]="property"></tag>
+//It is component to template change but not reverse.
+Example:
+
+export class AppComponent{
+    imagePath:string="assets/user.png";
+  setTimeout(()=>{
+      this.imagePath="assets/buser.png";
+  },500)
+
+}
+Template
+<img [src]="imagePath">
+//All the static content should be placed in assets folder.
+
+(iii)Event Binding
+component:
+method()
+{}
+Template:
+<tag (event) ="method()"></tag>
+//It is reverse of property binding.
+//It will invoke from template to component.
+//Used to execute some logic(programming code)when the user do some action in the web page.
+//() is the symbol of event binding.
+//used to handle any event:click,dbclick,focus,blur,keyup,change etc.
+Code:
+Template:
+<input type="button" (click)="onNextUserClick()">
+Component:
+export class AppComponent{
+    onNextUserClick()
+    {
+        alert("clicked");
+    }
+}
+
+(iv)Two-Way Binding
+Example:
+Template:
+<tag [(ngModel)]="properly"></tag>
+component:
+property:datatype
+//combination of property binding and event binding.
+//outer level is property binding and inner level is event binding.
+//Whenever you need forms use two-way binding.Such as textboxes,checkboxes,radio buttons,dropdwonlists etc.
+//'ngModel' is a predefined directive. Which should be imported first.
+//'ngModel' is available in forms module.
+
+app.module.ts
+import {FormsModule} from "@angular/forms";
+@NgModule({
+    imports:[FormsModule]
+})
+
+app.component.html
+<input type="text" [(ngModel)]="username">
+//two way binding
+
+<input type="text" [ngModel]="fullname">
+//property binding
+-------------------------------------------------------------------------------------------------------------------------------------
+Basic Form:
+LOGIN FORM:
+
+Component:
+
+export class AppComponent{
+
+    username:string;
+    password:string;
+    status:string;
+
+    onLoginClick(){
+        if(this.username == "salman" && this.password == "123"){
+            this.status="Successful Login";
+        }
+        else{
+            this.status="Invalid login";
+        }
+    }
+}
+
+AppComponent.html
+<div>
+<form>
+Username:<input type="text" [(ngModel)]="username" name="username"><br>
+Password:<input type="text" [(ngModel)]="password" name="password"><br>
+<input type="submit" value="Login" (click)="onLoginClick()">
+</form>
+</div>
+//name is compulsory in ngModel.
+
+REGISTRATION FORM:
+//Application becomes lightwight. Whenever particular component is invoke . That particular component will be available in
+the application.
+
+AppComponent.html
+<div>
+<form>
+Name:<input type="text" [(ngModel)]="name" name="username"><br>
+Email:<input type="text" [(ngModel)]="email" name="email"><br>
+Password:<input type="password" [(ngModel)]="password" name="password"><br>
+Confirm Password:<input type="password" [(ngModel)]="confirmPassword" name="confirmPassword"><br>
+Gender:
+<input type="radio" [(ngModel)]="gender" value="Male" name="Male">Male
+<input type="radio" [(ngModel)]="gender" value="Female" name="Female">Female
+<br>
+Country:
+<select [(ngModel)]="country" name="country">
+<option>Please Select</option>
+<option>India</option>
+<option>USA</option>
+<option>China<option>
+</select>
+<br>
+Recived News Letters:
+<input type="checkbox" [(ngModel)]="receivedNewsLetters" name="receivedNewsLetters" value="Yes"><br>
+<input type="submit" value="Register" (click)="onRegisterClick()"><br>
+{{status}}
+</form>
+</div>
+
+
+export class AppComponent{
+    name:string;
+    email:string;
+    password:string;
+    confirmPassword:string;
+    gender:string;
+    country:string;
+    receivedNewsLetters:boolean;
+    status:string;
+
+   onRegisterClick()
+   {
+       console.log(this.name);
+       this.status="Successfully Registered";
+   }
+
+}
+-------------------------------------------------------------------------------------------------------------------
+VIEW & CONTENT 
+
+sample.html
+<div>
+<p>Welcome to my website</p>---->view
+<ng-content></ng-content>----->content
+</div>
+
+sample.component
+@Component({
+    selector:"sample"
+})
+class SampleComponent
+{
+}
+
+app.component.html
+<sample>
+<p>You are the lucky visitor</p>
+</sample>
+
+<sample>
+<p>You are the second visitor</p>
+</sample>
+
+Output:
+Welcome to my website
+You are the lucky visitor
+You are the second visitor
+
+//View is compulsory but content is optional
+--------------------------------------------------------------------------------------------------------
+PASSING DYNAMIC DATA FROM PARENT COMPONENT TO CHILD COMPONENT
+Example:
+Component1.html[ParentTemplate]
+<div>
+<p>Parent</p>
+<comp2 [childProperty]="parentProperty">
+</comp2>
+</div>
+Component1.component.ts[ParentComponent]
+@Component({
+    selector:"comp1"
+})
+class ComponentComponent
+{
+    parentProperty:dataType;
+}
+
+Component2.component.html[ChildTemplate]
+<div>
+<p>Child</p>
+</div>
+
+Component2.component.ts[Child Component]
+@Component({
+    selector:"comp2"
+})
+class Component2Component
+{
+    childProperty:dataType;
+}
+
+Refer:code-Angular-App
+Code:
+Company.component.html
+<div>
+<h4>Company</h4>
+<app-employee [phoneNumberOfMyCompany]="companyContactNumber"></app-employee>
+</div>
+
+Company.component.ts
+export class CompanyComponent{
+    companyContactNumber:string="98983434";
+    //parentProperty
+}
+
+EmployeeComponent.ts
+
+import{Component,Input} from "@angular/core";
+
+export class EmployeeComponent{
+   @Input()phoneNumberOfMyCompany:string;
+   //"@Input() we ready to receive the value"
+   //childProperty
+}
+
+EmployeeComponent.html
+<div class="div1">
+<h4>Employee</h4>
+Phone:{{phoneNumberOfMyCompany}}
+</div>
+
+
+app.component.html
+<div class="div1">
+<h4>App</h4>
+<app-company></app-company>
+</div>
+----------------------------------------------------------------------------------------------------------------
+OVERVIEW OF ALL LIFE CYCLE HOOKS:
+//These are predefined methods that execute different stages of life cycle of component or directive.
+@component()
+class component
+{
+    //During run-time New Object will be created for the component class.
+}
+
+step1: Create Object for component class
+step2:Constructor()
+//Use Constructor to initialize properties of component & inject services into component
+step3:OnChanges.ngOnChanges()
+//"OnChanges" is a interface and "ngOnChanges()" is a method.
+//Executes when values are passed to input properties of the component & every time when input values have benn changed
+step4:OnInit.ngOnInit()
+//Executes after initialization of component meta data.Used to call services to get initial data from database.
+step5:DoCheck.ngDoCheck()
+//Executes when an event occurs before change "detection process" Used to identify whether change detection process occurs or not.
+//Example:keypresss,keyup,keydown.
+//Change detection is a process of comparing values from template to component. If any change occur on any side it will reflect.
+step6:AfterContentInit.ngAfterContentInit()
+//This method will execute after initialization of content.
+//Complete content of the component is called a view.
+//The content which render throught ngcontent tab is called content.Parent to child component is called content.
+step7:AfterContentChecked.ngAfterContentChecked()
+//Executes after "change detection" process of "Content" of the component.
+//Change detection process first occur in top of the content then in the view
+step8:AfterViewInit.ngAfterViewInit()
+//Executes after initialization of "View" of the component.
+step9:AfterViewChecked.ngAfterViewChecked()
+//Executes after "change detection" process of "View" of the component.
+Step10:DoCheck.ngDoCheck()
+//Executes when any JavaScript event occurs click,dbclick.
+step11:AfterContentChecked.ngAfterContentChecked()
+//Executes after "change detection" process of "Content" of the component.
+step12:AfterViewChecked.ngAfterViewChecked()
+//Executes after "change detection" process of "view" of the component.
+//Proces step 10,11,12 repeat number of times.
+step13:OnDestroy.ngOnDestroy()
+//Before deleting the component object from memory.
+//Currently working component will be closed.Befor moving to next component.
+
+Constructor:
+//For static value used single quotes inside double quotes.
+//example:[name]="'salman'"
+code:
+app.component.html
+<app-register [name]="'salman'" [email]="'salman@gamil.com'"></app-register>
+register.ts
+export class RegisterComponent{
+
+@Input() name:string;
+@Input() email:string;
+
+constructor()
+{
+    console.log("initialization of properties");
+    this.receivedNewsLetters=true;
+}
+
+}
+
+
+-->Life Cycle Hooks - ngOnChanges
+//After receiving value from parent component 'ngOnChanges' will execute.
+app.component.html--parent
+<app-register [name]="'salman'" [email]="'salman@gamil.com'"></app-register>
+
+register.component.ts
+import{OnChanges} from "@angular/core";
+
+export class RegisterComponent implements OnChanges{
+
+ngOnChanges(changes:SimpleChanges)
+{
+//This method execute when you pass data from Parent to child.
+console.log(changes);
+console.log(changes["name"].currentValue);
+console.log(changes["email"].currentValue);
+}
+}
+
+-->Life Cycle Hooks-ngOnInit
+register.component.ts
+import{OnInit} from "@angular/core";
+
+export class RegisterComponent implements OnInit{
+ngOnInit(){
+    //Mainly used for calling the service.
+    console.log("this is ngoninit");
+}
+}
+
+-->Life Cycle Hooks-ngDoCheck
+register.component.ts
+import {DoCheck} from "@angular/core";
+
+export class RegisterComponent implements DoCheck{
+ngDoCheck()
+{
+    console.log("ngOnCheck");
+   //It will check for change detection process.
+   //It will occur before and after rendering of data.
+}
+}
+
+-->Life Cycle Hooks-ngAfterContentInit
+app.component.html
+<app-register [name]="sallu" [email]="sallu@gmail.com">
+Hello --->content
+</app-register>
+
+
+import {AfterContentInit} from "@angular/core";
+export class RegisterComponent implements AfterContentInit{
+    ngAfterContentInit()
+    {
+        //initialization of properties of the contents
+    }
+}
+
+Registerhtml
+<ngcontent></ngcontent>
+
+
+
+
+-->Life Cycle Hooks - ngAfterContentChecked
+import{AfterContentChecked} from "@angular/core";
+
+export class RegisterComponent implements AfterContentChecked{
+
+    ngAfterContentChecked()
+    {
+        //after change detection process of the method.
+    }
+}
+
+
+--->Life Cycle Hooks -ngAfterViewInit
+import {AfterViewInit} from "@angular/core";
+
+export class RegisterComponent implements ngAfterViewInit
+{
+ngAfterViewInit()
+{
+//Before initialization of view
+}    
+}
+
+
+-->Life Cycle Hooks-ngAfterViewChecked
+import {ngAfterViewChecked} from "@angular/core";
+export class RegsiterComponent implements ngAfterViewChecked{
+
+ngAfterViewChecked(){
+//
+}
+
+//Everytime if you change something like event,letter or action.
+//ngDoCheck
+//ngAfterContentChecked
+//ngAfterViewChecked
+//The above three method will repeat.
+}
+
+
+-->Life Cycle Hooks-ngOnDestroy
+import{ngOnDestroy} from "@angular/core";
+
+export class RegisterComponent implements ngOnDestroy{
+//Sequence of method doesn't matter. life cycle hooks execute Sequencetly depending on the parameters.
+
+ngOnDestory(){
+console.log("ngOnDestory");
+}
+
+}
+---------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

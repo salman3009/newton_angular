@@ -1,0 +1,42 @@
+<!-- Parent to child child-input binding -->
+<!-- <div>{{project | json}}</div>
+<div>{{index}}</div> -->
+<!-- child to parent - output binding custom events -->
+<!-- <table>
+    <th>
+    id 
+    </th>
+    <th>
+     name
+    </th>
+    <th>
+        Edit
+    </th>
+    <tr>
+        <td>{{project.id}}</td>
+        <td>{{project.name}}</td>
+        <td><button (click)="onEditClick($event,index)">click</button></td>
+    </tr>
+</table> -->
+
+
+
+
+<!-- //parent to child - view child -->
+<table [hidden]="hideDetails" #tbl>
+    <th>
+    id 
+    </th>
+    <th>
+     name
+    </th>
+    <th>
+        Edit
+    </th>
+    <tr>
+        <td>{{project.id}}</td>
+        <td>{{project.name}}</td>
+        <td><button (click)="onEditClick($event,i)">click</button></td>
+    </tr>
+</table>
+<ng-content></ng-content>

@@ -1,0 +1,49 @@
+"Pure pipes":
+A pure pipe uses a pure function. It is only called when Angular detects a change in the value or the parameters passed as an input to a pipe. A pure pipe has many advantages over impure pipe:
+A pure pipe will revaluate only when there is a change in the value or parameter passed.
+A pure pipe will cache the results of the previous value or inputs. So a pure pipe can bind the output from a cache without revaluating if the input doesn't change.
+A single instance of the pure pipe is used all over the components.
+We just have to test it against known inputs and outputs.
+Pure pipes evaluate to pure change in either the input value(String, number, boolean) or in the object reference(Date, Array, Object).
+Inputs should not be mutable in case of pure pipes.
+"Impure Pipes":
+An impure pipe is called on every change detection cycle in Angular. It is called on every digest cycle irrespective of the change in the input or value. If we need some pipe to be called on every change detection, mark the pipe as impure. In the case of impure pipes, Angular will call the transform() method on every change cycle.
+Multiple instances are created for impure pipes.
+Impure pipes are not re-used.
+We can't use cache in case of impure pipes.
+Depends on some internal state.
+Called at every change detection cycle.
+Inputs passed to this pipe can be mutable.
+Examples of Impure Pipes
+
+a. Async Pipe
+
+b. JsonPipe and SlicePipe
+
+.ts file
+
+import { PipeTransform, Pipe } from '@angular/core';
+import { User } from './User';
+
+// Pipe
+@Pipe({
+  name: 'filter',
+  pure: true    ----> 'Default is true'
+})
+export class FilterPipe implements PipeTransform {
+  transform(users: User[], searchTerm: string): User[] {
+    if (!users || !searchTerm) {
+      return users;
+    }
+    return users.filter(user => user.name.toLowerCase()
+      .indexOf(searchTerm.toLowerCase()) !== -1);
+  }
+}
+.html file
+
+<input type="text" [(ngModel)]="searchTerm"  placeholder="Enter name" >
+<button (click)="changeProperty()">change by Property</button>
+<button (click)="changeReference()">change by Reference</button>
+<ul>
+<li *ngFor="let user of users | filter:searchTerm">{{user.name}}  </li>
+</ul>

@@ -1,0 +1,3765 @@
+Routing:
+   (i)Creating navigation mechanism for the application.
+   (ii)Each page is one component.
+   (iii)Routing =>Mapping between "url" <---> "component".
+Home route
+   (i)Index route  --->HomeComponent
+   (ii)Login route  -->LoginComponent
+   (iii)Register route ->RegisterComponent
+Question route
+   (i)Index route -->QuestionIndexComponent
+   (ii)View route -->QuestionViewComponent
+   (iii)New route -->QuestionNewComponent
+
+Creating Modules:
+//Modules is used to group the components.
+AccountModule
+   (i)HomeComponent--->/home/Index
+   (ii)LoginComponent-->/home/Login
+   (iii)RegisterComponent->/home/Register
+QuestionModule
+   (i)QuestionComponent-->/question/Index
+   (ii)QuestionViewComponent-->/question/View
+   (iii)QuestionNewComponent-->/question/New
+AppModule
+(i)AppComponent
+
+cmd: ng g module Account
+//"NgModule" helps to identify this is a module.
+//Once you add component name  in 'accountModule' then remove the component name in 'appModule'.
+
+//export (vs) import -->TypeScript -->to access a class from one file to other file
+//exports (vs) imports -->angular -->to access a class from one module to another module.
+code:AccountModule
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { HomeComponent } from '../home/home.component';
+import { LoginComponent } from '../login/login.component';
+import { RegisterComponent } from '../register/register.component';
+
+@NgModule({
+  imports: [
+    CommonModule
+  ],
+  exports:[
+    LoginComponent,LoginComponent,RegisterComponent
+  ],
+  declarations: [HomeComponent,
+    LoginComponent,
+    RegisterComponent
+  ]
+})
+export class AccountModule { }
+
+
+
+cmd:ng g module Questions
+code:QuestionsModule
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { QuestionIndexComponent } from '../question-index/question-index.component';
+import { QuestionsNewComponent } from '../questions-new/questions-new.component';
+import { QuestionViewComponent } from '../question-view/question-view.component';
+
+@NgModule({
+  imports: [
+    CommonModule
+  ],
+  exports:[QuestionIndexComponent,QuestionsNewComponent,QuestionViewComponent],
+  declarations: [QuestionIndexComponent,
+    QuestionViewComponent,
+    QuestionsNewComponent]
+})
+export class QuestionsModule { }
+
+code:
+app.module
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { AppComponent } from './app.component';
+import { QuestionIndexComponent } from './question-index/question-index.component';
+import { QuestionViewComponent } from './question-view/question-view.component';
+import { QuestionsNewComponent } from './questions-new/questions-new.component';
+import { AccountModule } from './account/account.module';
+import { QuestionsModule } from './questions/questions.module';
+import{FormsModule} from '@angular/forms';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+
+  ],
+
+  imports: [
+    BrowserModule,AccountModule,FormsModule,QuestionsModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+------------------------------------------------------------------------------------------------
+CREATING ROUTES:
+//app.component.html is a page which has complete layout.
+Route-->It is mapping between url and component.
+//app.module
+-->import two things for ROUTES
+code:
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { AppComponent } from './app.component';
+import { QuestionIndexComponent } from './question-index/question-index.component';
+import { QuestionViewComponent } from './question-view/question-view.component';
+import { QuestionsNewComponent } from './questions-new/questions-new.component';
+import { AccountModule } from './account/account.module';
+import { QuestionsModule } from './questions/questions.module';
+import { HomeComponent } from './home/home.component';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
+import{FormsModule} from '@angular/forms';
+import{Routes,RouterModule}from "@angular/router";
+
+
+var myroutes:Routes=[
+  {path:"home",component:HomeComponent},
+  {path:"login",component:LoginComponent},
+  {path:"register",component:RegisterComponent},
+  {path:"questions",component:QuestionIndexComponent},
+  {path:"newquestion",component:QuestionsNewComponent},
+  {path:"viewquestion",component:QuestionViewComponent}
+];
+
+
+var myroutes2= = RouterModule.forRoot(myroutes);
+//RouterModule contains predefined scripts that are needed 
+//myroutes is a userdefined routes.
+
+  declarations: [
+    AppComponent,
+
+  ],
+
+  imports: [
+    BrowserModule,AccountModule,FormsModule,QuestionsModule,myroutes2
+    //You have to import myroutes.
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+
+
+
+
+//index.html
+<base href="/">
+//Above tag is important.It will specify route part of the application.
+Example:
+http://localhost:4200/subdomain/home-->HomeComponent
+http://localhost:4200-->domain
+subdomain-->subdirectory
+//If you want to have subdomain name then you can add in base href.
+code;
+<base href="/gmail">
+
+
+//To decide the place where it should be. we need "router-outlet".
+app.component.html
+<div>
+  <div id="header">Header</div>
+  <h3>StackOverflow</h3>
+  <a routerLink="home">Home</a>
+  //"home" is should be the pathname give in "myroutes" array.
+  <a routerLink="login">Login</a>
+  <a routerLink="register">Register</a>
+  <a routerLink="questions">Question</a>
+  <a routerLink="newquestion">New Question</a>
+  <a routerLink="viewquesstion">View Question</a>
+  <div id="pagecontent">pageContent
+    <router-outlet></router-outlet>
+  </div>
+  <div id="footer">Footer</div>
+</div>
+-----------------------------------------------------------------------------------------------
+CREATING LOGIN FORM:
+Login.component.html
+<div id="loginDiv">
+  <h4>Login</h4>
+  <form>
+  Email:<input type="text" [(ngModel)]="email"><br>
+  Password:<input type="password"><br>
+<input type="submit" value="Login">
+</form>
+</div>
+
+Login.component.ts
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css']
+})
+export class HomeComponent implements OnInit {
+
+  email:string="test@gmail.com";
+  password:string;
+  message:string;
+
+  constructor() { }
+
+  ngOnInit() {
+  }
+
+  onLoginClick()
+  {
+    if(this.email="admin@gmail.com" && this.password=="manager")
+    {
+      this.message="SuccessfulLogin";
+    }
+    else{
+      this.message="Invalid Login";
+    }
+  }
+
+}
+-------------------------------------------------------------------------
+REGISTRATION FORM:
+register.component.html
+<div id="registerDiv">
+  <form>
+      <label for="txtEmail">Email</label>
+      <input type="text" id="txtEmail" name="email" [(ngModel)]="email"><br>
+      <!-- Give label name and input type id same. If you click on label id will be focused-->
+      <label for="txtPersonName">Person Name</label>
+      <input type="text" id="txtPersonName" name="personname" [(ngModel)]="personname"><br>
+      <label for="txtPassword">Password</label>
+      <input type="text" id="txtPassword" name="password" [(ngModel)]="password"><br>
+      <label for="txtMobile">Mobile</label>
+      <input type="text" id="txtMobile" name="mobile" [(ngModel)]="mobile"><br>
+      <!-- <label for="txtAge">Age</label>
+      <input type="text" id="txtAge" [(ngModel)]="age"><br> -->
+      <label for="txtAmount">Amount</label>
+      <input type="text" id="txtAmount" name="amount" [(ngModel)]="amount"><br>
+      <label for="isDate">Date of Birth</label>
+      <input type="text" id="isDate"  name="isDate" [(ngModel)]="dateofbirth" size="4">
+      <input type="text" id="isMonth" name="isMonth" [(ngModel)]="monthofbirth" size="4">
+      <input type="text" id="isYear" name="isYear" [(ngModel)]="yearofbirth" size="4">
+      <br>
+      <input type="checkbox" id="newsLetter" name="receivenewsletters" [(ngModel)]="receivenewsletters">
+      <label for="newsLetter">Receive News Letters</label><br>
+      <label for="rbGender">Gender:</label>
+      <input type="radio" [(ngModel)]="gender" value="Male" name="gender" id="rbMale">
+      <label for="rbMale">Male:</label>
+      <input type="radio" [(ngModel)]="gender" value="Female" name="gender" id="rbFemale">
+      <label for="rbFemale">Female:</label>
+      <input type="radio" [(ngModel)]="gender" value="Other" name="gender" id="rbOther">
+      <label for="rbOther">Other:</label>
+      <label for="drpCountry">Country</label>
+      <select [(ngModel)]="country" name="country">
+        <option value=""> Please Select</option>
+        <option value="India">India</option>
+        <option value="United States of America">United States of America</option>
+        <option value="United Kindgom">United Kingdom</option>
+        <option value="China">China</option>
+        <option value="Japan">Japan</option>
+      </select><br>
+      <input type="submit" value="Register" (click)="onRegisterClick()">
+      <input type="reset">
+  </form>
+{{message}}
+</div>
+register.component.ts
+export class RegisterComponent implements OnInit {
+
+  email:string;
+  personname:string;
+  password:string;
+  age:number;
+  mobile:string;
+  dateofbirth:number;
+  monthofbirth:number;
+  yearofbirth:number;
+  receivenewsletters:boolean;
+  gender:string;
+  country:string;
+  amount:number;
+  message:string;
+
+  constructor() { }
+
+  ngOnInit() {
+  }
+
+  onRegisterClick()
+  {
+
+    //We are using browser storage.
+    //Browser storage means browser internal memory.
+
+    //Difference between JSON and Object array:
+
+    //JSON = [{"property":value,"property:value"},{"property":value,"property":value}]
+    //Object array = [{property:value,property:value},{property:value,property:value}]
+    //JSON.stringify : Convert "object array" into "JSON"
+    //JSON.parse:Convert "JSON" to "Object array"
+
+    var s = "Email" + this.email + ",Person name "+this.personname + ",Password " + this.password + ",Mobile" + this.mobile;
+    console.log(this.email);
+   //'this' is refer at the runtime object will be created for this particular class.
+   //So 'this' will refer to the runtime object.
+
+   if(localStorage.users == null || localStorage.users == undefined)
+   {
+     localStorage.users = JSON.stringify([]);
+   }
+   var u = JSON.parse(localStorage.users);
+   u.push({email:this.email,personname:this.personname,password:this.password,mobile:this.mobile,dateofbirth:this.dateofbirth,monthofbirth:this.monthofbirth,yearofbirth:this.yearofbirth,receivenewsletters:this.receivenewsletters,gender:this.gender,country:this.country,amount:this.amount});
+   localStorage.users=JSON.stringify(u);
+   this.message="Successfully Registered";
+  }
+
+
+}
+
+login.component.ts
+export class LoginComponent implements OnInit {
+
+
+
+  email:string="test@gmail.com";
+  password:string;
+  message:string;
+
+  constructor() { }
+
+  ngOnInit() {
+  }
+
+  onLoginClick()
+  {
+    if(this.CheckEmailAndPassword(this.email,this.password)==true)
+    {
+      this.message="SuccessfulLogin";
+    }
+    else{
+      this.message="Invalid Login";
+    }
+  }
+
+  private CheckEmailAndPassword(email:string,password:string):boolean{
+    var u = JSON.parse(localStorage.users);
+    var found:boolean = false;
+    for(var i=0;i<u.length;i++)
+    {
+      if(u[i].email == email && u[i].password == password)
+      {
+        found = true;
+      }
+    }
+    return found;
+  }
+}
+------------------------------------------------------------------------------------------------------------
+Built-in Directives in Angular:
+(i)ngIf
+(ii)ngIf and else
+(iii)ngSwitch
+(iv)ngFor
+
+//For above predefined directives. You have to include 'commonModule'
+import{CommonModule} from "@angular/common";
+//Include this in account module.
+(i)*ngIf
+//we can write condition and microsyntax.
+//Microsyntax means small set of code.
+//'*' means we adding microsyntax.
+Example:
+<p *ngIf="issuccessfullyRegistered">Successfully Registered</p>
+//If condition is true this will appear
+
+
+//Handling exception
+onRegisterClick()
+{
+
+  try{
+
+  }
+  catch(err)
+  {
+     console.log(err);
+  }
+
+}
+
+
+//ng-template
+//'<ng-template>' is used to enlose the set of tags.
+//'#template1' is reference variable for the tag.
+//"*ngIf="issuccessfullyRegistered;then template1;else template2" this is called microsyntax.
+
+Code:
+<div *ngIf="issuccessfullyRegistered;then template1;else template2">
+</div>
+<ng-template #template1>
+<p>Successfully Registered</p>
+</ng-template>
+
+<ng-template #template2>
+<p>Registration Failed</p>
+<ng-template>
+
+
+//nested *ngIf statement
+code:
+<div *ngIf="showDisplayMessage">
+<div *ngIf="issuccessfullyRegistered;then template1;else template2">
+</div>
+</div>
+
+(ii)ngSwitch
+//writing 'ngSwitch' in template itself
+code:
+<span [ngSwitch]="monthofbirth">
+<span *ngSwitchCase="'1'">Jan</span>
+<span *ngSwitchCase="'2'">Feb</span>
+<span *ngSwitchCase="'3'">Mar</span>
+<span *ngSwitchCase="'4'">Apr</span>
+<span *ngSwitchCase="'5'">May</span>
+<span *ngSwitchCase="'6'">Jun</span>
+<span *ngSwitchCase="'7'">Jul</span>
+<span *ngSwitchCase="'8'">Aug</span>
+<span *ngSwitchCase="'9'">Sep</span>
+<span *ngSwitchCase="'10'">Oct</span>
+<span *ngSwitchCase="'11'">Nov</span>
+<span *ngSwitchCase="'12'">Dec</span>
+<span *ngSwitchDefault>Unknown</span>
+</span>
+
+(iii)ngFor
+//Reading data from using *ngFor
+category.component.ts
+export class Category{
+    categoriesList:string[]=["Java",".NET","Angular","BlockChain"];
+    //This string array. But most of the time it will be object array
+}
+
+category.component.html
+<div>
+  <ul>
+    <li *ngFor="let category of categoriesList">{{category}}</li>
+  </ul>
+</div>
+
+//For object array first create the modal class.
+cmd:ng g class category
+//Modal class defining the structure of the data.
+code:
+export class Category {
+  categoryId:number;
+  categoryName:string;
+  addedBy:string;
+
+constructor(categoryId:number,categoryName:string,addedBy:string){
+this.categoryId=categoryId;
+this.categoryName=categoryName;
+this.addedBy=addedBy;
+}
+
+}
+category.component.ts
+import{Category} from '../category;
+
+export class Category{
+categoriesList:Category[]=[
+  new Category(1,"Java","salman"),
+  new Category(1,".Net","salman"),
+  new Category(1,"BlockChain","salman"),
+  new Category(1,"Angular","salman"),
+  new Category(1,"React","salman"),
+]; 
+
+}
+category.component.html
+  <table border="1">
+    <tr>
+      <th>
+        Category Id
+      </th>
+      <th>
+        Category Name
+      </th>
+      <th>
+        Added By
+      </th>
+    </tr>
+    <tr *ngFor="let category of categoriesList">
+   <td>{{category.categoryId}}</td>
+   <td>{{category.categoryName}}</td>
+   <td>{{category.addedBy}}</td>
+    </tr>
+  </table>
+---------------------------------------------------------------------------------------------------------------
+Form ang Validation:
+1.Template Driven Forms(default)
+  //validations are written in the template
+  //We can't perform unit testing on validation. In case of template driven forms.
+  //Easy
+  //FormsModule from "@angular/forms"
+2.Reactive Forms
+  //Validations are written in the component.
+  //We can perform unit testing on validations. In case of reactive forms.
+  //Difficuilt
+  //ReactiveFormsModule from "@angular/forms"
+
+1.Template Driven Forms:
+//Whenever we are using 'ngModel' it is template driven forms
+//include "FormsModule" in app.module
+
+HTML5 attributes for validation rules in template driven forms:
+1.required="required"
+2.min="minimum value"
+3.max="maximum value"
+4.pattern="regular expression"
+5.minlength="minimum no of characters"
+
+CSS classes for Template Driven Froms Validations
+1.ng-untouched
+  //Indicates that the field is not touched by the user.
+2.ng-touched
+  //Indicates that the field is touched by the user.
+3.ng-prestine
+  //Indicates that the field(checkbox,radiobutton,dropdown,textbox) is not modified by the user.
+4.ng-dirty
+  //Indicates that the field is modified by the user.
+5.ng-valid
+  //Indicates that the field is valid means all the validation rules are satisfied
+6.ng-invalid
+//Indicates that the field is invalid means atleast one validation rules are not satisfied.
+
+login.component.css
+//'input' it will apply only for text box.
+
+input.ng-invalid.ng-touched{
+  border:2px solid red;
+}
+input.ng-valid.ng-touched{
+  border:2px solid green;
+}
+
+login.component.html
+  <form #myform="ngForm">
+    <!--'#myform' is a reference name can be access within the template only-->
+  Email:<input type="text" [(ngModel)]="email" name="email" required="required" pattern="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" #control1="ngModel"><br>
+  <span class="error" *ngIf="control1.invalid && control1.touched && control1.errors.required">Email can't be blank</span>
+  <span class="error" *ngIf="control1.invalid && control1.touched && control1.errors.pattern">Email id invalid</span>
+  Password:<input type="password" [(ngModel)]="password" name="password" pattern="((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,15})" required="required" #control2="ngModel"><br>
+  <span class="error" *ngIf="control2.invalid && control2.touched && control2.errors.required">password can't be blank</span>
+  <span class="error" *ngIf="control2.invalid && control2.touched && control2.errors.pattern">password invalid</span>
+  <input type="submit" value="Login" (click)="onLoginClick(myform)"><br>
+
+{{message}}
+</form>
+
+login.component.ts
+ onLoginClick(myform)
+  {
+    if(myform.valid == true)
+    {
+      if(this.CheckEmailAndPassword(this.email,this.password)==true)
+      {
+        this.message="SuccessfulLogin";
+      }
+      else{
+        this.message="Invalid Login";
+      }
+    }
+
+  }
+
+Regular Expressions:
+
+1.Digits only ---> ^[0-9]*$
+2.Alphabets only --> ^[a-zA-Z]*$
+3.Indian Mobile Number -->^[789]{1}[0-9]{9}$
+4.Email --> \w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*
+5.Username:Alphabets,Digits and Hyphens only-->([A-Za-z0-9]+)
+6.Passwords:6 to 15 characters; atleast one upper case letter,one lower case letter and one digit-->
+  ((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,15})
+
+
+REACTIVE Forms:
+//"@angular/forms" -->"ReactiveFormsModule"
+//Validation rules in reactive forms
+  1.Validators required : Field is mandatory
+  2.Validators.minLength: Minimum no.of characters
+  3.Validators.maxLength: Maximum no.of characters
+  4.Validators.pattern:Regular expression
+
+Validation Properties:
+ 1.untouched : true|false
+ 2.touched   : false|true
+ 3.pristine  : true|false
+ 4.dirty     : false|true
+ 5.valid     : true|false
+ 6.Invalid   : false|true
+ 7.errors    
+ //erros is an object.
+     (i)required : true | false
+     (ii).minLength:true| false
+    (iii).maxLenth:true | false
+     (iv).pattern:true|false
+//We have to remove "ngModule" instead we have to use the "FormControl" and "FormGroup".
+
+register.component.html
+<div id="registerDiv">
+  <form [formGroup]="myform">
+      <label for="txtEmail">Email</label>
+      <input type="text" id="txtEmail" formControlName="email"><br>
+      <!-- Give label name and input type id same. If you click on label id will be focused-->
+   <span class="error" *ngIf="myform.controls.email.invalid && myform.controls.email.touched && myform.controls.email.errors.required">Email can't be blank</span>
+   <span class="error" *ngIf="myform.controls.email.invalid && myform.controls.email.touched && myform.controls.email.errors.pattern">Email is invalid</span>
+      <label for="txtPersonName">Person Name</label>
+      <input type="text" id="txtPersonName" formControlName="personname"><br>
+      <span class="error" *ngIf="myform.controls.personname.invalid && myform.controls.personname.touched && myform.controls.personname.errors.required">Person name can't be blank</span>
+      <span class="error" *ngIf="myform.controls.personname.invalid && myform.controls.personname.touched && myform.controls.personname.errors.pattern">Person name is invalid</span>
+      <span class="error" *ngIf="myform.controls.personname.invalid && myform.controls.personname.touched && myform.controls.personname.errors.maxlength">Person maxlength is invalid</span>
+      <span class="error" *ngIf="myform.controls.personname.invalid && myform.controls.personname.touched && myform.controls.personname.errors.minlength">Person minlength is invalid</span>
+      <label for="txtPassword">Password</label>
+      <input type="text" id="txtPassword" formControlName="password"><br>
+      <span class="error" *ngIf="myform.controls.password.invalid && myform.controls.password.touched && myform.controls.password.errors.required">Password  can't be blank</span>
+      <span class="error" *ngIf="myform.controls.password.invalid && myform.controls.password.touched && myform.controls.password.errors.pattern">Password is invalid</span>
+      <label for="txtMobile">Mobile</label>
+      <input type="text" id="txtMobile" formControlName="mobile"><br>
+      <span class="error" *ngIf="myform.controls.mobile.invalid && myform.controls.mobile.touched && myform.controls.mobile.errors.required">mobile  can't be blank</span>
+      <span class="error" *ngIf="myform.controls.mobile.invalid && myform.controls.mobile.touched && myform.controls.mobile.errors.pattern">mobile is invalid</span>
+      <!-- <label for="txtAge">Age</label>
+      <input type="text" id="txtAge" [(ngModel)]="age"><br> -->
+      <label for="txtAmount">Amount</label>
+      <input type="text" id="txtAmount" formControlName="amount"><br>
+      <label for="isDate">Date of Birth</label>
+      <input type="text" id="isDate"  formControlName="dateofbirth" size="4">
+      <span class="error" *ngIf="myform.controls.dateofbirth.invalid && myform.controls.dateofbirth.touched && myform.controls.dateofbirth.errors.required">date can't be blank</span>
+      <span class="error" *ngIf="myform.controls.dateofbirth.invalid && myform.controls.dateofbirth.touched && myform.controls.dateofbirth.errors.pattern">date is invalid</span>
+      <input type="text" id="isMonth" formControlName="monthofbirth" size="4">
+      <span class="error" *ngIf="myform.controls.monthofbirth.invalid && myform.controls.monthofbirth.touched && myform.controls.monthofbirth.errors.required">monthofbirth  can't be blank</span>
+      <span class="error" *ngIf="myform.controls.monthofbirth.invalid && myform.controls.monthofbirth.touched && myform.controls.monthofbirth.errors.pattern">monthofbirth is invalid</span>
+      <span [ngSwitch]="monthofbirth">
+          <span *ngSwitchCase="'1'">Jan</span>
+          <span *ngSwitchCase="'2'">Feb</span>
+          <span *ngSwitchCase="'3'">Mar</span>
+          <span *ngSwitchCase="'4'">Apr</span>
+          <span *ngSwitchCase="'5'">May</span>
+          <span *ngSwitchCase="'6'">Jun</span>
+          <span *ngSwitchCase="'7'">Jul</span>
+          <span *ngSwitchCase="'8'">Aug</span>
+          <span *ngSwitchCase="'9'">Sep</span>
+          <span *ngSwitchCase="'10'">Oct</span>
+          <span *ngSwitchCase="'11'">Nov</span>
+          <span *ngSwitchCase="'12'">Dec</span>
+          <span *ngSwitchDefault>Unknown</span>
+          </span>
+      <input type="text" id="isYear" formControlName="yearofbirth" size="4">
+      <span class="error" *ngIf="myform.controls.yearofbirth.invalid && myform.controls.yearofbirth.touched && myform.controls.yearofbirth.errors.required">yearofbirth  can't be blank</span>
+      <span class="error" *ngIf="myform.controls.yearofbirth.invalid && myform.controls.yearofbirth.touched && myform.controls.yearofbirth.errors.pattern">yearofbirth is invalid</span>
+      <br>
+      <input type="checkbox" id="newsLetter" formControlName="receivenewsletters">
+      <label for="newsLetter">Receive News Letters</label><br>
+      <label for="rbGender">Gender:</label>
+      <input type="radio" formControlName="gender" value="Male"  id="rbMale">
+      <label for="rbMale">Male:</label>
+      <input type="radio" formControlName="gender" value="Female"  id="rbFemale">
+      <label for="rbFemale">Female:</label>
+      <input type="radio" formControlName="gender" value="Other"  id="rbOther">
+      <label for="rbOther">Other:</label>
+      <label for="drpCountry">Country</label>
+      <select formControlName="country" >
+        <option value=""> Please Select</option>
+        <option value="India">India</option>
+        <option value="United States of America">United States of America</option>
+        <option value="United Kindgom">United Kingdom</option>
+        <option value="China">China</option>
+        <option value="Japan">Japan</option>
+      </select><br>
+      <input type="submit" value="Register" (click)="onRegisterClick()">
+      <input type="reset">
+      <div *ngIf="isSuccessfulLogin;then template1;else template2">
+        </div>
+        <ng-template #template1>
+        <p>Successfully Registered</p>
+        </ng-template>
+
+        <ng-template #template2>
+        <p>Registration Failed</p>
+        </ng-template>
+  </form>
+</div>
+
+register.component.ts
+import{FormGroup,FormControl,Validators} from "@angular/forms";
+
+export class RegisterComponent {
+  myform:FormGroup;
+  //myform is entire form
+  message: string;
+  isSuccessfulLogin: boolean;
+
+  constructor() {
+    this.myform= new FormGroup({
+      email: new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z0-9.@]*$")]),
+      //"" means string datatype
+      personname: new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z]*$"),Validators.minLength(3),Validators.maxLength(30)]),
+      password: new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z0-9]*$")]),
+      mobile: new FormControl("",[Validators.required,Validators.pattern("^[789]{1}[0-9]{9}$")]),
+      dateofbirth: new FormControl("",[Validators.required,Validators.pattern("^[0-9]*$")]),
+      monthofbirth: new FormControl("",[Validators.required,Validators.pattern("^[0-9]*$")]),
+      yearofbirth: new FormControl("",[Validators.required,Validators.pattern("^[0-9]*$")]),
+      receivenewsletters:new FormControl("",[]),
+      gender:new FormControl("",[Validators.required]),
+      country: new FormControl("",[Validators.required]),
+      amount: new FormControl("",[Validators.required,Validators.pattern("^[0-9]*$")])
+    });
+  }
+  onRegisterClick() {
+    try {
+
+    if(this.myform.valid == true)
+    {
+      if (localStorage.users == null || localStorage.users == undefined) {
+        localStorage.users = JSON.stringify([]);
+      }
+      var u = JSON.parse(localStorage.users);
+      u.push({
+        email: this.myform.controls.email.value,
+        personname: this.myform.controls.personname.value,
+        password: this.myform.controls.password.value,
+        mobile: this.myform.controls.mobile.value,
+        dateofbirth: this.myform.controls.dateofbirth.value,
+        monthofbirth: this.myform.controls.monthofbirth.value,
+        yearofbirth: this.myform.controls.yearofbirth.value,
+        receivenewsletters: this.myform.controls.receivenewsletters.value,
+        gender: this.myform.controls.gender.value,
+        country: this.myform.controls.country.value,
+        amount: this.myform.controls.amount.value
+      });
+      localStorage.users = JSON.stringify(u);
+      this.isSuccessfulLogin = true;
+      this.message = "Successfully Registered";
+    }
+
+    } catch (err) {
+      this.isSuccessfulLogin = false;
+    }
+  }
+}
+------------------------------------------------------------------------------------------------------------------------------
+PIPES:
+//Pipe is a class that transforms a value from "actual format" to "user-expected format".
+
+Example:
+10-->pipe-->ten
+bank:1500 --> pipe -->One thousand and five hundred
+bank:1500 --> pipe --> $1,500
+
+Two types of pipes:
+  1.Built-in pipes.
+  2.User-defined pipes/custom pipes.
+1.Built-in pipes
+    1.uppercase
+    2.lowercase
+    3.slice
+    4.number
+    5.currency
+    6.percent
+    7.date
+    8.JSON
+example:
+{{property | pipename}}
+
+//To create a custom pipe
+cmd:ng g pipe Duration
+//Add this in parent module(app.module).(doubt)
+//If you want to reflect in only particular module then add in the child module only.
+example:
+duration: 150 mins --->custom pipe  -->2 hr and 30 min
+duration: 120 mins --->custom pipe  -->2 hr
+
+duration.ts
+import { Pipe, PipeTransform } from '@angular/core';
+
+@Pipe({
+//This particular class is a pipe class
+  name: 'duration'
+//Above name should be used to call in the templates
+})
+export class DurationPipe implements PipeTransform {
+
+   //PipeTransform is predefined interface
+  transform(value: any, args?: any): any {
+    //args for additional values like "INR,USD"
+    //return null;
+
+    var h = parseInt(String(value/60));
+    //parseInt accept only string
+    var m = value-(h*60);
+    var s:string;
+    if(m==0)
+    {
+      s = h + "hr";
+    }
+    else{
+      s = h +"hr and " +m+ "min";
+    }
+    return s;
+  }
+//For all the built-in pipes (uppercase,lowercase) correponding transform method will invoke.
+}
+
+contact.component.ts
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-contact',
+  templateUrl: './contact.component.html',
+  styleUrls: ['./contact.component.css']
+})
+export class ContactComponent implements OnInit {
+
+
+   city:string = "Hyderabad";
+   salary:number = 343434;
+   tax:number = 0.80;
+   person:object={firstname:"Adam",lastname:"Salman"};
+   dt:Date = new Date();
+
+
+ //custom pipes
+ videolength:number = 150;
+ videolength2:number = 120;
+
+  constructor() { }
+
+  ngOnInit() {
+  }
+
+}
+
+contact.component.html
+<div>
+  <h5>uppercase</h5>
+  {{city | uppercase}}<br>
+  {{city | lowercase}}<br>
+  <h5>slice</h5>
+  {{city | slice:2:6}}<br>
+  <h5>number</h5>
+  {{salary}}<br>
+  {{salary|number}}<br>
+  {{salary|number:".2"}}<br>
+  <h5>currency</h5>
+  {{salary|currency}}<br>
+  {{salary|currency:"USD"}}<br>
+  {{salary|currency:"INR"}}<br>
+  {{salary|currency:"GBP"}}<br>
+  {{salary|currency:"EUR"}}<br>
+  <h5>Percent</h5>
+  {{tax | percent}}
+  <h5>json</h5>
+  {{person|json}}<br>
+  <h5>date</h5>
+  {{dt}}<br>
+  {{dt | date:"shortDate"}}<br>
+  {{dt | date:"mediumDate"}}<br>
+  {{dt |date:"longDate"}}<br>
+  {{dt | date:"fullDate"}}<br>
+  {{dt | date:"shortTime"}}<br>
+  {{dt|date:"mediumTime"}}<br>
+  {{dt|date:"short"}}<br>
+  {{dt|date:"medium"}}<br>
+  {{dt|date:"y-M-d"}}<br>
+  {{dt|date:"d/M/y"}}<br>
+  {{dt|date:"h:m:s"}}<br>
+  {{dt|date:"hh:mm:ss"}}<br>
+  {{dt|date:"H:m"}}<br>
+  {{dt|date:"a"}}<br>
+  {{dt|date:"EEE"}}<br>
+  {{dt|date:"EEEE"}}<br>
+  {{dt|date:"EEEEE"}}<br>
+  {{dt|date:"MMM"}}<br>
+  {{dt|date:"MMMMM"}}<br>
+  {{dt|date:"Z"}}<br>
+  {{videolength|duration}}<br>
+</div>
+--------------------------------------------------------------------------------------------------------------
+Life Cycle Hooks:
+//While executing the component some predefined methods will be execute.
+//From point of creating object object in component upto the end of the component.Different stages will be execute.
+//Angular frameworks is responsible to create object for component.render it and its children, checks for updates of properties and
+update the DOM and destroy it before removing from DOM.
+//Life Cycle Hook - Method that at certain point of component life.
+
+OVERVIEW OF ALL LIFE CYCLE HOOKS:
+//These are predefined methods that execute different stages of life cycle of component or directive.
+@component()
+class component
+{
+    //During run-time New Object will be created for the component class.
+}
+
+step1: Create Object for component class
+//Once object is created the constructor will automatically called.
+-----------------------------------------------------------------------
+step2:Constructor()
+//Use Constructor to initialize properties of component & inject services into component
+Constructor:
+//For static value used single quotes inside double quotes.
+//example:[name]="'salman'"
+code:
+app.component.html
+<app-register [name]="'salman'" [email]="'salman@gamil.com'"></app-register>
+register.ts
+export class RegisterComponent{
+
+@Input() name:string;
+@Input() email:string;
+
+constructor()
+{
+    console.log("initialization of properties");
+    this.receivedNewsLetters=true;
+}
+
+}
+------------------------------------------------------------------------
+step3:OnChanges.ngOnChanges()
+//Interface "Onchanges" is optional. But it is good to give interface name.
+//"OnChanges" is a interface and "ngOnChanges()" is a method.
+//Executes when values are passed to input properties of the component & every time when input values have been changed
+cmd:ng g component company
+//Remove from app.module and add in account.module
+code:
+company.html
+<div>{{x}}</div>
+<div>{{y}}</div>
+
+company.component.ts
+import{SimpleChanges,OnChanges}from "@angular/core";
+
+export class componay implements OnChanges
+{
+x:number;
+  @Input()y:number;
+  //'@Input()' means value will be change.
+  constructor() {
+    this.x=222;
+    this.y=200;
+  }
+  ngOnChanges(changes:SimpleChanges)
+  {
+    console.log(changes);
+   //'SimpleChanges' will give object all the value it has received.
+    //Whatever value change in parent component will recieve in the child component.
+    console.log(changes.y.currentValue);
+    //To check the current value.
+  }
+}
+  
+contact.html(parent for company-componet)
+  //single value
+  <app-company [y]=002200></app-company>
+-----------------------------------------------------------------------------------------
+
+step4:OnInit.ngOnInit()
+//Executes after initialization of component meta data.Used to call services to get initial data from database.
+
+-->Life Cycle Hooks-ngOnInit
+register.component.ts
+import{OnInit} from "@angular/core";
+
+export class RegisterComponent implements OnInit{
+ngOnInit(){
+    //Mainly used for calling the service.
+    console.log("this is ngoninit");
+}
+}
+--------------------------------------------------------------------------------------------
+step5:DoCheck.ngDoCheck()
+//Executes when an event occurs before change "detection process" Used to identify whether change detection process occurs or not.
+//Example:keypresss,keyup,keydown.
+//Change detection is a process of comparing values from template to component. If any change occur on any side it will reflect.
+
+-->Life Cycle Hooks-ngDoCheck
+register.component.ts
+import {DoCheck} from "@angular/core";
+export class RegisterComponent implements DoCheck{
+ngDoCheck()
+{
+    console.log("ngOnCheck");
+   //It will check for change detection process.
+   //It will occur before and after rendering of data.
+}
+}
+----------------------------------------------------------------------------------------
+step6:AfterContentInit.ngAfterContentInit()
+//This method will execute after initialization of content.
+//Complete content of the component is called a view.
+//The content which render throught ngcontent tab is called content.Parent to child component is called content.
+-->Life Cycle Hooks-ngAfterContentInit
+app.component.html
+<app-register [name]="sallu" [email]="sallu@gmail.com">
+Hello --->content
+</app-register>
+
+import {AfterContentInit} from "@angular/core";
+export class RegisterComponent implements AfterContentInit{
+    ngAfterContentInit()
+    {
+        //initialization of properties of the contents
+    }
+}
+
+Registerhtml
+<ng-content></ng-content>
+----------------------------------------------------------------------
+step7:AfterContentChecked.ngAfterContentChecked()
+//Executes after "change detection" process of "Content" of the component.
+//Change detection process first occur in top of the content then in the view
+
+
+-->Life Cycle Hooks - ngAfterContentChecked
+import{AfterContentChecked} from "@angular/core";
+
+export class RegisterComponent implements AfterContentChecked{
+
+    ngAfterContentChecked()
+    {
+        //after change detection process of the method.
+    }
+}
+
+----------------------------------------------------------------------
+
+step8:AfterViewInit.ngAfterViewInit()
+//Executes after initialization of "View" of the component.
+
+
+--->Life Cycle Hooks -ngAfterViewInit
+import {AfterViewInit} from "@angular/core";
+
+export class RegisterComponent implements ngAfterViewInit
+{
+ngAfterViewInit()
+{
+//Before initialization of view
+}    
+}
+
+----------------------------------------------------------------
+step9:AfterViewChecked.ngAfterViewChecked()
+//Executes after "change detection" process of "View" of the component.
+
+-->Life Cycle Hooks-ngAfterViewChecked
+import {ngAfterViewChecked} from "@angular/core";
+export class RegsiterComponent implements ngAfterViewChecked{
+
+ngAfterViewChecked(){
+//
+}
+
+//Everytime if you change something like event,letter or action.
+//ngDoCheck
+//ngAfterContentChecked
+//ngAfterViewChecked
+//The above three method will repeat.
+}
+----------------------------------------------------------------
+Step10:DoCheck.ngDoCheck()
+//Executes when any JavaScript event occurs click,dbclick.
+step11:AfterContentChecked.ngAfterContentChecked()
+//Executes after "change detection" process of "Content" of the component.
+step12:AfterViewChecked.ngAfterViewChecked()
+//Executes after "change detection" process of "view" of the component.
+//Proces step 10,11,12 repeat number of times.
+
+------------------------------------------------------------------
+step13:OnDestroy.ngOnDestroy()
+//Before deleting the component object from memory.
+//Currently working component will be closed.Befor moving to next component.
+
+-->Life Cycle Hooks-ngOnDestroy
+import{ngOnDestroy} from "@angular/core";
+
+export class RegisterComponent implements ngOnDestroy{
+//Sequence of method doesn't matter. life cycle hooks execute Sequencetly depending on the parameters.
+
+ngOnDestory(){
+console.log("ngOnDestory");
+}
+
+}
+
+-------------------------------------------------------------------------
+MANIPULATION OF CHILDREN OF COMPONENT:
+//Whenever you invoke one component in another component that is called child component.
+Example:
+@component({
+  selector:"c1"
+})
+class component1
+{}
+
+@component({
+  selector:"c2"
+})
+class component2
+{}
+
+app.component.html
+<c1>----------------->child component
+component1' template
+</c1>
+Component1.component.html
+<div>
+<c2></c2>------------->child component
+</div>
+Component2.component.html
+<div>
+</div>
+
+Problem:
+@Component({selector:"c1"})
+class Component{
+  method()
+  {
+    this.property2=value;-------->not possible normally
+  }
+}
+
+@Component({selector:"c2"})
+class Component2{
+
+  property2:string;
+}
+//If we want to access property2 in component c1 we have to use "Manipulation of Children of Component"
+1.ViewChild
+2.ViewChildren
+3.ContentChild
+4.ContentChildren
+
+
+(i)ViewChild:Represents a child of specific type in the current component.
+//present in the view(template)
+Example:
+contact.component.html----->parent component
+<div>
+<app-componay [y]=9898></app-company>--->child component
+ <input type="button" value="Change Data" (click)="onChangeDataClick()">
+</div>
+contact.component.ts
+import{Component,ViewChild}from "@angular/core";
+import{CompanyComponent}from "../company/company.component";
+export class ContactComponent
+{
+  @ViewChild(CompanyComponent)comp:CompanyComponent;
+  //CompanyComponanet is a class name.
+  //comp is an object
+  //comp:CompanyComponent means comp is belongs to this type.
+  ngAfterViewInit()
+  {
+    console.log(this.comp);
+  }
+  
+    onChangeDataClick()
+  {
+    this.comp.y=999999;
+    //Within the button click we are changing the data
+  }
+}
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+(ii)ViewChildren
+//Represents the children of specific type in the current component which is present
+in the view(template).
+problem:
+//If you have multiple "app-component" instance in parentcomponent.
+Example:
+contact.component.html----->parent component
+<div>
+<app-componay [y]=9898></app-company>--->child component
+ <input type="button" value="Change Data" (click)="onChangeDataClick()">
+</div>
+contact.component.ts
+import{Component,ViewChildren,QueryList}from "@angular/core";
+import{CompanyComponent}from "../company/company.component";
+export class ContactComponent
+{
+ @ViewChildren(CompanyComponent)comp2:QueryList<CompanyComponent>;
+
+  
+    onChangeDataClick()
+  {
+    var arr=this.comp2.toArray();
+    //toArray() is an inbuilt method.
+    for(var i=0;i<arr.length;i++)
+    {
+      arr[i].y = i;
+    }
+    //Within the button click we are changing the data
+  }
+}
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+(iii)ContentChild:
+
+problem:
+contact.component.html----->parent component
+<div>
+<app-componay [y]=9898>--->contentview
+<div>These are content</div>---------->contentchild
+</app-company>--->child component
+</div>
+CMD:ng g component Empoyee
+Example:
+Employee.component.ts
+export class EmployeeComponent 
+{
+empname:string="test1";
+salary:number=1234;
+}
+Employee.component.html
+<div>
+<h5>Employee</h5>
+Emp Name:{{empname}}<br>
+Salary:{{salary}}
+</div>
+
+
+Contact.compoent.html
+<div>
+<app-componay [y]=9898>--->contentview
+<div>These are content</div>---------->contentchild
+<app-employee></app-employee>
+</app-company>--->child component
+</div>
+
+
+Company.component.html
+<input type="button" value="change data 2" (click)="onChangeData2Click()">
+<ng-content></ng-content>
+Company.component.ts
+import(ContentChild) from "@angular/core";
+import{EmployeeComponent}from"../employee/EmployeeComponent";
+
+export class CompanyComponanet{
+@ContentChild(EmployeeComponent)comp3:EmployeeComponent;
+ngAfterContentInit()
+{
+  console.log(this.comp3);
+}
+    onChangeData2Click()
+  {
+    this.comp3.empname="new emp name";
+    this.comp3.salary=898833;
+  }
+}
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+(iii)ContentChildren:
+
+Example:
+Employee.component.ts
+export class EmployeeComponent 
+{
+empname:string="test1";
+salary:number=1234;
+}
+Employee.component.html
+<div>
+<h5>Employee</h5>
+Emp Name:{{empname}}<br>
+Salary:{{salary}}
+</div>
+
+
+Contact.compoent.html
+<div>
+<app-componay [y]=9898>--->contentview
+<div>These are content</div>---------->contentchild
+<app-employee></app-employee>
+<app-employee></app-employee>
+</app-company>--->child component
+</div>
+
+
+Company.component.html
+<input type="button" value="change data 2" (click)="onChangeData2Click()">
+<ng-content></ng-content>
+Company.component.ts
+import(ContentChildren,QueryList) from "@angular/core";
+import{EmployeeComponent}from"../employee/EmployeeComponent";
+
+export class CompanyComponanet{
+@ContentChildren(EmployeeComponent)comp4:QueryList<EmployeeComponent>;
+    onChangeData2Click()
+  {
+    var a=this.comp4.toArray();
+    for(var i=0;i<this.a.length;i++)
+    {
+     a[i].empname="updated loop"+"salman";
+     a[i].salary=5000;
+    }
+    //Both "app-employee" will updated.
+  }
+}
+---------------------------------------------------------------------------------------------------
+70.REFERENCE NAMES:
+//To access the specific "viewchild" from number of instance. we have to use refernce names.
+Example:
+Contact.compoent.html
+<div>
+<app-componay [y]=9898>--->contentview
+<div>These are content</div>---------->contentchild
+<app-employee></app-employee>
+<app-employee #secondOne> </app-employee>---->reference name
+</app-company>--->child component
+<input type="button" value="Reference Name" (click)="onChangeDataClick2()"><br>
+</div>
+
+
+contact.component.ts
+
+contact.component.ts
+import{Component,ViewChild}from "@angular/core";
+import{CompanyComponent}from "../company/company.component";
+export class ContactComponent
+{
+ @ViewChild("secondOne")comp3:CompanyComponanet;
+
+  
+    onChangeDataClick2()
+  {
+    this.comp3.y=7777777;
+  }
+}
+---------------------------------------------------------------------------
+71.UPGRADE FROM ANGULAR 5 TO 6.
+Steps:
+1.Install Nodejs 10
+2.npm update npm -g
+3.npm uninstall typescript -g
+4.npm install typescript -g
+5.npm uninstall @angular/cli -g
+6.npm install @angular/cli -g
+7.cd c:\angular6
+8.ng new app2
+9.copy dependencies from "c:\angular6\app2\package.json" to "c:\angular5\app1\package.json"
+10.Delete "c:\angular6am\app1\node_modules".
+11.cd c:\angular6am\app1
+12.npm install
+13.ng update @angular/cli
+14.ng serve
+--------------------------------------------------------------------------------
+72.Deploying Angular App into Apache Tomcat Server
+//You can migrate angular app to Java,.Net,PHP,Nodejs
+//For Java you will use "Tomcat Server"
+//For PHP you will use "Xampp Server"
+//For .Net you will use "ASP Server"
+//For deployment you have to build the angular app.
+cmd:ng build
+//dist folder will be created.
+It will consist of
+(i)index.html--->starting part of the application
+(ii)favicon.ico-->It will consists of icon 
+(iii)map file is generated for debugging purposes.It is used ony for development purpose not for production.
+//To reduce file size of production then 
+cmd:ng build --prod
+//Then copy the 'dist' file in apache tomcat.
+//Install "JDK"
+//Install "apache tomcat"
+Problem:
+//Once you refresh the browser. The browser not able to find the url
+Solution:
+//Enable hash in routing.
+app.module.ts
+var myroutes2 = RouterModule.forRoot(myroutes,{useHash:true});
+-------------------------------------------------------------------------------
+73.Deploying Angular App into .NET
+//Angular app-->ng build-->Build files[.js]-->Add the build files to the existing .net project
+//In .Net frameworks
+//Go to microsoft visual studio create ASP.NET Web Application.
+//Then paste the angular code in ASP.NET
+-------------------------------------------------------------------------------
+74.Deploying Angular APP into Nodejs
+//Angular app-->ng build-->Build files[.js]-->Add the build files to the existing nodejs app
+------------------------------------------------------------------------
+75.style and ngClass
+//Manipulating CSS styles using Angular:
+1.[style.property]---->For single property
+2.ngClass---->For multipe property
+Example:[style.property]
+contact.component.html
+  <h2>Style property</h2>
+  <p [style.color]="marksColor">{{mark}}</p>
+contact.component.ts
+export class Contact{
+
+  marksColor:string;
+  mark:number;
+  constructor()
+  {
+   this.mark=79;
+   if(this.mark>=35)
+   {
+     this.marksColor="green";
+   }
+   else{
+     this.marksColor="red";
+   }
+
+  }
+}
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Example:ngClass
+contact.component.css
+.class1{
+  font-size:30px;
+  border:4px solid blue;
+  font-weight:bold;
+  letter-spacing:2px;
+  color:green;
+}
+.class2{
+  font-size:25px;
+  border:3px solid red;
+  font-weight:bold;
+  letter-spacing:4px;
+  color:red;
+}
+contact.component.html
+  <p [ngClass]="marksCssClass">{{mark}}</p>
+contact.component.ts
+export class contactComponent{
+     marksCssClass:string;
+ mark:number;
+  constructor() {
+    this.mark=70;
+    if(this.mark>=35)
+    {
+      this.marksCssClass="class1";
+    }
+    else{
+      this.marksCssClass="class2";
+    }
+  }
+}
+---------------------------------------------------------------------------------------------
+76.SERVICES:
+//Service is a re-usable class that can be called in multiple components.
+//CRUD operations & other business logic.
+//One component can have multiple service.
+//Once service can have injected in multiple components.
+Dependency Injection:
+Example:
+Developer-->I want an object of a class-->DI-->Angular frameworks-->class classname{Propertiesmethods}-->Create a new object-->Pass the object to the developer-->developer
+1.Singleton can be achieved(Whenever service is called old object will be passed not new object will be created)
+2.The class can be replacable.
+code:
+cmd:ng g service Login
+login.service.ts
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root'
+})
+//To make class as service add "@Injectable"
+export class LoginService {
+
+  constructor() { }
+
+  public CheckEmailAndPassword(email:string,password:string):boolean{
+   //Method should be public
+    var u = JSON.parse(localStorage.users);
+    var found:boolean = false;
+    for(var i=0;i<u.length;i++)
+    {
+      if(u[i].email == email && u[i].password == password)
+      {
+        found = true;
+      }
+    }
+    return found;
+  }
+
+}
+
+//Add this service to particular module.In account module.
+account.module.ts
+import { LoginService } from '../login.service';
+@NgModule({
+  providers:[LoginService]
+})
+login.component.ts
+import { Component, OnInit,Inject } from '@angular/core';
+import { LoginService } from '../login.service';
+export class LoginComponent implements OnInit {
+
+  constructor(@Inject(LoginService)private s:LoginService) {
+    //@Inject is a method. We are requesting angular framework to create an object for service class
+     //'s' is object of this class
+     //'s:LoginService'.Here 'LoginService is a datatype for 's'.
+  }
+
+  onLoginClick(myform)
+  {
+    debugger;
+    if(myform.valid == true)
+    {
+      if(this.s.CheckEmailAndPassword(this.email,this.password)==true)
+      {
+        this.message="SuccessfulLogin";
+      }
+      else{
+        this.message="Invalid Login";
+      }
+    }
+  }
+}
+------------------------------------------------------------------------------------------------
+77.Custom Directives
+//Directive is an attribute/tag which is artificially created based on angular framework
+//Custom directives do some operation/produce some special output [or] manipulate existing output of a html tag
+
+Syntax of custom directives:
+(i)square bracket
+@Directive({selector:"[yourselector]"})---->use square bracket to make 'selector' as attribute to html tag.
+export class directiveclassname
+{
+  constructor()
+  {
+
+  }
+}
+Template:
+<tag yourselector></tag>
+
+(ii)
+@Directive({selector:"yourselector"})---->use without square bracket to make 'selector' as tag  to html.
+export class directiveclassname
+{
+  constructor()
+  {
+
+  }
+}
+Template:
+<yourselector></yourselector>
+
+Difference between Directive and component
+Solution:Directive does not support template but component support the template.
+//Generally component points to particular section of the page.But Directive points to particular section of html tag.
+
+code:
+cmd:ng g directive Sample
+
+//Add directive in account module.
+account.module.ts
+import { SampleDirective } from '../sample.directive';
+@NgModule({
+  declarations:[SampleDirective]
+})
+
+register.component.html
+<img width="30px" appSample firstImage="/assets/right1.png" secondImage="/assets/right2.png">
+
+sample.directive.ts
+import { Directive,ElementRef,Inject,HostListener,Input } from '@angular/core';
+
+@Directive({
+  selector: '[appSample]'
+})
+export class SampleDirective {
+
+  @Input()firstImage:string;
+  @Input()secondImage:string;
+  //'@Input()' is used to get Input from someother component
+  constructor(@Inject(ElementRef)private currentElement:ElementRef) {
+    console.log("Sample Directive Invoked");
+    console.log(this.currentElement.nativeElement);
+    //nativeElement is used to access the attribute from html
+   }
+
+   ngOnChanges()
+   {
+     this.currentElement.nativeElement.setAttribute("src",this.firstImage);
+     //Initialize this property in 'ngOnChanges()' because it is coming from some other component.
+   }
+
+   @HostListener("mouseover")
+   //'@HostListener' used to listen to events
+   onmouseover()
+   {
+     this.currentElement.nativeElement.setAttribute("src",this.secondImage);
+   }
+   @HostListener("mouseout")
+   onmouseout()
+   {
+     this.currentElement.nativeElement.setAttribute("src",this.firstImage);
+   }
+
+}
+---------------------------------------------------------------------------------------------------
+78.INTRODUCTION TO AJAX
+-->AJAX(Asynchronous JavaScript And Xml)is Not a language, but it is a concept, which is used to "send background
+request to server" and also "get background response from server", without refreshing(reloading) the web page in the browser.
+
+Browser(Client)                                              Server
+->User performs some activity                             Receive the request from browser
+->Send AJAX request to server--------------------------->                    |
+                                                          Do process(dbconnection)
+                                                                  |  
+Same Browser(Client)  <---------------------------------- Send response to browser
+->Get response from server
+->Display the response
+
+Advantages of AJAX
+//Executes faster
+//Less burden on browser (client) and server
+//Better use experience
+
+Types of AJAX request
+Get:Used to retrieve/search data from server
+Post:User to insert data to server
+Put:Used to update data on server
+Delete:Used to delete data from server
+//These http method
+//By default it is "get" method
+--------------------------------------------------------------------------------------------------
+79.Setting-up Environment for Nodejs Ajax.
+1.Installing Nodejs
+2.Installing MongoDB
+1.Installing Nodejs
+step1:
+//create one folder
+step2:
+cmd:npm init
+//Install three packages:
+(i)express
+(ii)body-parser
+(iii)mongoose
+step3:
+httpserver.js
+var express = require("express");
+var app = express();
+app.listen(9090);
+app.use(express.static(__dirname));
+
+var mongoose = require("mongoose");
+var UsersSchema = new mongoose.Schema( { _id: Number, email: String, personName: String, password: String, mobile: String, dateOfBirth: Number, monthOfBirth: Number, yearOfBirth: Number, amount: Number, receiveNewsLetters: Boolean, gender: String, country: String  }, { versionKey: false } );
+var Users = mongoose.model("users", UsersSchema);
+
+var QuestionsSchema = new mongoose.Schema( { _id: Number, questionname: String, questiondateandtime: String, userid: String, categoryid: String, viewscount: Number, answerscount: Number, votescount: Number }, { versionKey: false } );
+var Questions = mongoose.model("questions", QuestionsSchema);
+
+var CategoriesSchema = new mongoose.Schema( { _id: Number, categoryname: String }, { versionKey: false } );
+var Categories = mongoose.model("categories", CategoriesSchema);
+
+var bodyparser = require("body-parser");
+app.use(bodyparser.urlencoded( { extended: true } ));
+app.use(bodyparser.json());
+
+app.get("/", function(req, res) {
+  res.sendFile(__dirname + "/index.html");
+});
+
+app.post("/insertuser", function(req, res) {
+  mongoose.connect("mongodb://localhost/stackoverflow");
+  var d = new Date();
+  var newUser = new Users( { email: req.body.email, personName: req.body.personName, password: req.body.password, mobile: req.body.mobile, dateOfBirth: req.body.dateOfBirth, monthOfBirth: req.body.monthOfBirth, yearOfBirth: req.body.yearOfBirth, amount: req.body.amount, receiveNewsLetters: req.body.receiveNewsLetters, gender: req.body.gender, country: req.body.country, _id: d.getTime() } );
+  newUser.save(function(err) {
+    if (err)
+    {
+      console.log(err);
+      res.send("Failed");
+    }
+    else
+    {
+      res.send("Successfully Inserted");
+    }
+    mongoose.connection.close();
+  });
+});
+
+app.post("/checkemailandpassword", function(req, res) {
+  mongoose.connect("mongodb://localhost/stackoverflow");
+  console.log(req.body.email);
+  console.log(req.body.password);
+  Users.find({ email: req.body.email, password: req.body.password }, function(err, data) {
+    if (err)
+    {
+      console.log(err);
+      res.send("Failed");
+    }
+    else
+    {
+      res.send(data);
+    }
+    mongoose.connection.close();
+  });
+});
+
+app.get("/getlatestquestions", function(req, res) {
+  setTimeout( function() {
+    mongoose.connect("mongodb://localhost/stackoverflow");
+    Questions.find(function(err, data) {
+      if (err)
+      {
+        console.log(err);
+        res.send("Failed");
+      }
+      else
+      {
+        console.log(data);
+        res.send(data);
+      }
+      mongoose.connection.close();
+    });
+  }, 200);
+});
+
+app.get("/getquestionbyquestionid", function(req, res) {
+  mongoose.connect("mongodb://localhost/stackoverflow");
+  Questions.findOne({ _id: req.query._id }, function(err, data) {
+    if (err)
+    {
+      console.log(err);
+      res.send("Failed");
+    }
+    else
+    {
+      console.log(data);
+      res.send(data);
+    }
+    mongoose.connection.close();
+  });
+});
+
+app.get("/getcategories", function(req, res) {
+  mongoose.connect("mongodb://localhost/stackoverflow");
+  Categories.find(function(err, data) {
+    if (err)
+    {
+      console.log(err);
+      res.send("Failed");
+    }
+    else
+    {
+      console.log(data);
+      res.send(data);
+    }
+    mongoose.connection.close();
+  });
+});
+
+app.post("/insertcategory", function(req, res) {
+  mongoose.connect("mongodb://localhost/stackoverflow");
+  console.log(req.body);
+  var newCategory = new Categories( { _id: req.body._id, categoryname: req.body.categoryname  } );
+  newCategory.save(function(err) {
+    if (err)
+    {
+      console.log(err);
+      res.send("Failed");
+    }
+    else
+    {
+      res.send("Successfully Inserted");
+    }
+    mongoose.connection.close();
+  });
+});
+
+app.put("/updatecategory", function(req, res) {
+  setTimeout(() => {
+    mongoose.connect("mongodb://localhost/stackoverflow");
+    console.log(req.body);
+  
+    Categories.findOne({ _id: req.body._id }, function(err, data)
+    {
+      if (err)
+      {
+        console.log(err);
+        res.send("Failed");
+      }
+      else
+      {
+        console.log(data);
+        data.categoryname = req.body.categoryname;
+        data.save(function(err) {
+          if (err)
+          {
+            console.log(err);
+            res.send("Failed");
+          }
+          else
+          {
+            res.send("Successfully Updated");
+          }
+          mongoose.connection.close();
+        });
+      }
+    });
+  }, 4000);
+  
+});
+
+app.delete("/deletecategory", function(req, res) {
+  mongoose.connect("mongodb://localhost/stackoverflow");
+  console.log(req.query);
+
+  Categories.remove({ _id: req.query._id }, function(err, data)
+  {
+    if (err)
+    {
+      console.log(err);
+      res.send("Failed");
+    }
+    else
+    {
+      console.log(data);
+      res.send("Successfully Deleted");
+      mongoose.connection.close();
+    }
+  });
+});
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+MongoDB:
+//To create db:
+cmd:use stackoverflow
+//To create collection
+cmd:db.createCollection("users");
+
+MongoDB Schema attributes:
+
+1.Categories
+   -categoryId
+   -categoryName
+2.Users
+  -Email
+  -personName
+  -Password
+  -Mobile
+  -dateOfBirth
+  -monthOfBirth
+  -yearofbirth
+  -Amount
+  -receiveNewsLetters
+  -Gender
+  -Country
+3.Questions
+  -QuestionID 
+  -questionname
+  -questiondateandtime
+  -userid
+  -categoryId
+  -viewscount
+4.answerscount
+   -AnswersID
+   -AnswerName
+   -QuestionID
+   -userid
+   -AnswerDateAndTime
+   -votes
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Angular deployment:
+//copy dist folder inside the nodejs folder
+cmd:node httpserver.js
+browser:http://localhost:9090
+---------------------------------------------------------------------------
+80.Registration Form with AJAX
+//write all Ajax call in service layer
+Example:
+Component--->Angular Service(ajax here)--->Server Side Program(nodejs)
+cmd:ng g service Users
+cmd:ng g class User
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+User.ts
+//It is model class
+export class User {
+
+  email:string;
+  personName:string;
+  password:string;
+  mobile:string;
+  dateofBirth:number;
+  monthofBirth:number;
+  yearofBirth:number;
+  amount:number;
+  receiveNewsLetters:boolean;
+  gender:string;
+  country:string;
+
+
+  constructor(email:string,personName:string,password:string,mobile:string,dateofBirth:number,monthofBirth:number,yearofBirth:number,amount:number,receiveNewsLetters:boolean,gender:string,country:string)
+  {
+    this.email=email;
+    this.personName=personName;
+    this.password=password;
+    this.mobile=mobile;
+    this.dateofBirth=dateofBirth;
+    this.monthofBirth=monthofBirth;
+    this.yearofBirth=yearofBirth;
+    this.amount=amount;
+    this.receiveNewsLetters=receiveNewsLetters;
+    this.gender=gender;
+    this.country=country;
+  }
+}
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+users.service.ts
+
+import { Injectable ,Inject} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import{User} from "./user";
+
+@Injectable({
+  providedIn: 'root'
+})
+export class UsersService {
+
+  constructor(@Inject(HttpClient)private http:HttpClient) {
+
+   }
+inserUser(u:User){
+  //'User' is not a service. So no need of inject.
+  this.http.post("http://localhost:9090/insertuser",u,{responseType:"text"}).subscribe(
+    function(response){
+        console.log("success");
+    },function(error){
+       console.log(error);
+    }
+  )
+  //responseType can be "text" or "json"
+  //we have two function one is success and other one is failure
+  //success means response code will be 200
+  //failure means response code will be 400 or 500
+  //Only one callback function will be executed.
+}
+}
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+account.module.ts
+import { UsersService } from '../users.service';
+providers:[UsersService]
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+register.component.ts
+import { Component, OnInit,Inject } from "@angular/core";
+import { UsersService } from '../users.service';
+import{FormGroup,FormControl,Validators} from "@angular/forms";
+import{User} from '../user';
+
+@Component({
+  selector: "app-register",
+  templateUrl: "./register.component.html",
+  styleUrls: ["./register.component.css"]
+})
+export class RegisterComponent implements OnInit {
+
+  myform:FormGroup;
+  //myform is entire form
+  message: string;
+  isSuccessfulLogin: boolean;
+  monthofbirth:number;
+
+  constructor(@Inject(UsersService)private uService:UsersService) {
+    this.myform= new FormGroup({
+      email: new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z0-9.@]*$")]),
+      //"" means string datatype
+      personname: new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z]*$"),Validators.minLength(3),Validators.maxLength(30)]),
+      password: new FormControl("",[Validators.required,Validators.pattern("^[a-zA-Z0-9]*$")]),
+      mobile: new FormControl("",[Validators.required,Validators.pattern("^[789]{1}[0-9]{9}$")]),
+      dateofbirth: new FormControl("",[Validators.required,Validators.pattern("^[0-9]*$")]),
+      monthofbirth: new FormControl("",[Validators.required,Validators.pattern("^[0-9]*$")]),
+      yearofbirth: new FormControl("",[Validators.required,Validators.pattern("^[0-9]*$")]),
+      receivenewsletters:new FormControl("",[]),
+      gender:new FormControl("",[Validators.required]),
+      country: new FormControl("",[Validators.required]),
+      amount: new FormControl("",[Validators.required,Validators.pattern("^[0-9]*$")])
+    });
+  }
+
+  ngOnInit() {}
+
+ //Ajax call
+   onRegisterClick() {
+    try {
+    debugger;
+    if(this.myform.valid == true)
+    {
+      var u:User = new User(this.myform.controls.email.value,this.myform.controls.personname.value,this.myform.controls.password.value,
+        this.myform.controls.mobile.value,this.myform.controls.dateofbirth.value,this.myform.controls.monthofbirth.value,this.myform.controls.yearofbirth.value,
+        this.myform.controls.amount.value, this.myform.controls.receivenewsletters.value,this.myform.controls.gender.value,this.myform.controls.country.value);
+       this.uService.inserUser(u);
+
+      this.isSuccessfulLogin = true;
+      this.message = "Successfully Registered";
+    }
+
+
+
+    } catch (err) {
+      this.isSuccessfulLogin = false;
+    }
+  }
+}
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+app.module.ts
+import { HttpClientModule } from '@angular/common/http';
+@NgModule({
+  declarations: [
+    AppComponent
+
+  ],
+
+  imports: [
+    BrowserModule,AccountModule,HttpClientModule,FormsModule,ReactiveFormsModule,QuestionsModule,myroutes2
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+------------------------------------------------------------------------------------------------------------
+81.Login Form
+Flow:
+Login-->LoginComponent(this.s.checkemailandpassword())---->LoginService(this.http.post())--->HttpClient(send ajax request to server)--->nodejs(app.post("/checkemailandpassword))
+//"HttpClient" work is based on "rxjs" package.
+Things to be noted:
+1.check "@angular/http" is there in package.json.
+2.check "HttpClientModule" in app.module
+3.check "@inject(HttpClient)" in login.service
+4.check "this.http.get or post" in ajax call
+5.response will be "json" and it will automatically converted into javascript object
+6.Finally we have "Observable" return type
+7.Then we use "subscribe()".
+//Inside "subscribe()" write all the function in "arrow" because "arrow function" "this" keyword indicates the object to that component only.
+//For normal function "this" keyword may indicate to someother component also. It is global.
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+login.component.ts
+import { Component, OnInit,Inject } from '@angular/core';
+import { LoginService } from '../login.service';
+
+@Component({
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
+})
+export class LoginComponent implements OnInit {
+
+  email:string="test@gmail.com";
+  password:string;
+  message:string;
+
+  constructor(@Inject(LoginService)private s:LoginService) {
+    //@Inject is a method. We are requesting angular framework to create an object for service class
+     //'s' is object of this class
+     //'s:LoginService'.Here 'LoginService is a datatype for 's'.
+  }
+
+  ngOnInit() {
+  }
+
+//ajax call
+onLoginClick(myform)
+{
+  debugger;
+  if(myform.valid == true)
+  {
+    this.s.CheckEmailAndPassword(this.email,this.password).subscribe(
+     (response)=>{
+        if(response)
+        {
+            this.message="SuccessfulLogin";
+        }
+        else{
+      this.message="Invalid Login";
+        }
+      },(error)=>
+      {
+        console.log(error);
+      });
+ }
+}
+}
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+login.service.ts
+import { Injectable,Inject } from '@angular/core';
+import{HttpClient} from "@angular/common/http";
+import{Observable}from 'rxjs';
+import{User} from './user';
+
+@Injectable({
+  providedIn: 'root'
+})
+//To make class as service add "@Injectable"
+export class LoginService {
+
+constructor(@Inject(HttpClient)private http:HttpClient) { }
+
+//ajax call
+public CheckEmailAndPassword(email:string,password:string):Observable<User>
+{
+  //return should be "Observable"
+  var loginParameter={email:email,password:password};
+  return this.http.post<User>("/checkemailandpassword",loginParameter,{responseType:"json"});
+//"<user>" means what type of response you are getting from server
+}
+}
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+82.Questions with AJAX
+//Insert data into "mongo" shell
+cmd:use stackoverflow
+cmd:db.categories.insert([{categoryname:"java"},{categoryname:"angular"},{categoryname:"React"}])
+cmd:db.question.insert([{questionname:"What is the purpose of services in angular?",questiondateandtime:new Date(),userid:"5eer34343",categoryId:"343434",viewcount:0}]);
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//create service
+cmd:ng g service question
+import { Injectable,Inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import{Question} from './question';
+import{Observable}from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class QuestionsService {
+
+  questionsCount =0;
+
+  incrementQuestionsCount()
+  {
+    this.questionsCount +=5;
+  }
+
+  constructor(@Inject(HttpClient)private http:HttpClient) {
+
+   }
+   public getQuestions():Observable<Question>
+   {
+     return this.http.get<Question>("/getlatestquestions",{responseType:"json"});
+   }
+}
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+app.module.ts
+import{QuestionService}from './questions.service';
+
+@NgModule({
+  providers:[QuestionService]
+})
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+cmd:ng g class question
+export class Question {
+
+  questionname:string;
+  questiondateandtime:string;
+  userid:string;
+  categoryid:string;
+  viewcount:number;
+
+  constructor(questionname:string,questiondateandtime:string,userid:string,categoryid:string,viewcount:number)
+  {
+   this.questionname = questionname;
+   this.questiondateandtime=questiondateandtime;
+   this.userid=userid;
+   this.categoryid=categoryid;
+   this.viewcount=viewcount;
+  }
+
+
+}
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+home.component.ts
+import { Component, OnInit,Inject } from '@angular/core';
+import { QuestionsService } from '../questions.service';
+import{Question} from "../question";
+
+@Component({
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css']
+})
+export class HomeComponent implements OnInit {
+
+  questions:Question[]=[];
+
+  constructor(@Inject(QuestionsService)private questionsService:QuestionsService) { }
+
+  ngOnInit() {
+    this.questionsService.getQuestions().subscribe(
+      (response)=>{
+        console.log(response);
+        this.questions=response;
+
+      },
+      (error)=>{
+        console.log(error);
+      });
+  }
+
+}
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+home.component.html
+<div>
+  <h4>Home</h4>
+  <table>
+    <tr *ngFor="let question of questions">
+      <td>
+        {{question.viewcount}}Votes
+      </td>
+      <td>
+        {{question.userid}}Answer
+      </td>
+      <td>
+        <h5>{{question.questionname}}</h5>
+      {{question.categoryid}}
+      </td>
+      <td>
+        {{question.questiondateandtime}}
+      </td>
+    </tr>
+  </table>
+</div>
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+83.CRUD Operations with AJAX - Part 1
+//Create new service 
+cmd:ng g service categories
+
+export class Category {
+  _id:number;
+  categoryname:string;
+constructor(_id:number,categoryname:string){
+this._id=_id;
+this.categoryname=categoryname;
+}
+}
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+categories.component.ts
+import { Component, OnInit,Inject } from '@angular/core';
+import { Category } from '../category';
+import { CategoriesService } from '../categories.service';
+
+@Component({
+  selector: 'app-category',
+  templateUrl: './category.component.html',
+  styleUrls: ['./category.component.css']
+})
+export class CategoryComponent implements OnInit {
+
+  CategoriesList:Category[];
+  newCategory:Category;
+  showTextBoxes:boolean=false;
+  updateCategory:Category;
+  updateIndex:number=0;
+  showLoading:boolean=false;
+  constructor(@Inject(CategoriesService)private CategoriesService:CategoriesService) {
+    this.newCategory=new Category(null,null);
+    this.updateCategory=new Category(null,null);
+  }
+
+  ngOnInit() {
+  this.CategoriesService.getCategories().subscribe(
+    (response)=>{
+      console.log(response);
+      this.CategoriesList=response;
+
+    },
+    (error)=>{
+      console.log(error);
+    },
+  );
+
+
+  }
+
+  onInsertClick()
+  {
+    this.CategoriesService.insertCategory(this.newCategory).subscribe(
+     (response)=>{
+       this.CategoriesList.push(new Category(this.newCategory._id,this.newCategory.categoryname));
+       this.newCategory._id=null;
+       this.newCategory.categoryname=null;
+      },(error)=>{
+       console.log(error);
+     }
+    );
+  }
+
+  onDeleteClick(index,id)
+  {
+    if(confirm("Are you sure to delete this category"))
+    {
+      this.CategoriesService.deleteCategory(id).subscribe(
+        (response)=>{
+         this.CategoriesList.splice(index,1);
+       },(error)=>{
+          console.log(error);
+        }
+       );
+    }
+  }
+
+  onEditClick(index)
+  {
+    this.showTextBoxes=true;
+    this.updateCategory._id=this.CategoriesList[index]._id;
+    this.updateCategory.categoryname=this.CategoriesList[index].categoryname;
+    this.updateIndex=index;
+  }
+
+
+  onUpdateClick(index)
+  {
+    this.showLoading=true;
+    this.CategoriesService.updateCategory(this.updateCategory).subscribe(
+      (response)=>{
+       this.showTextBoxes=false;
+       this.CategoriesList[this.updateIndex]._id=this.updateCategory._id;
+       this.CategoriesList[this.updateIndex].categoryname=this.updateCategory.categoryname;
+       this.showLoading=false;
+      },(error)=>{
+        console.log(error);
+      }
+     );
+  }
+  // categoriesList:Category[]=[
+  //   new Category(1,"Java","salman"),
+  //   new Category(1,".Net","salman"),
+  //   new Category(1,"BlockChain","salman"),
+  //   new Category(1,"Angular","salman"),
+  //   new Category(1,"React","salman"),
+  // ];
+  // categoriesList:string[]=["Java",".NET","Angular","BlockChain"];
+
+}
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+categories.component.html
+<div>
+  <!-- <ul>
+    <li *ngFor="let category of categoriesList">{{category.categoryId}}</li>
+
+  </ul> -->
+  <table border="1">
+    <tr>
+      <th>
+        Category Id
+      </th>
+      <th>
+        Category Name
+      </th>
+      <th>
+
+      </th>
+    </tr>
+    <tr *ngFor="let category of CategoriesList;index as i">
+   <td>{{i+1}}</td>
+   <td>{{category.categoryname}}</td>
+   <td>
+      <input type="button" value="Edit" (click)="onEditClick(i)">
+    <input type="button" value="Delete" (click)="onDeleteClick(i,category._id)"></td>
+    </tr>
+    <tr>
+      <td><input type="text" [(ngModel)]="newCategory._id" placeholder="Category ID"></td>
+      <td><input type="text" [(ngModel)]="newCategory.categoryname" placeholder="Category Name"></td>
+      <td><input type="button" value="insert" (click)="onInsertClick()"></td>
+    </tr>
+  </table>
+
+  <h4 *ngIf="showTextBoxes">Update Category</h4>
+  <table *ngIf="showTextBoxes">
+    <tr>
+      <td>Category ID</td>
+      <td><input type="text" [(ngModel)]="updateCategory._id"></td>
+      </tr>
+      <tr>
+        <td>Category Name</td>
+        <td><input type="text" [(ngModel)]="updateCategory.categoryname"></td>
+      </tr>
+    <tr>
+      <td></td>
+      <td><input type="button" value="Update" (click)="onUpdateClick()">
+       <img src="/assets/ajax-loader.gif" *ngIf="showLoading">
+      </td>
+    </tr>
+  </table>
+</div>
+
+_________________________________________________________________________________________________________________
+85.Angular Ajax with Java Servlets:
+_________________________________________________________________________________________________________________
+86.Http Interceptors:
+Step1:Browser send a request to server.
+Step2:Server create a random number
+Step3:Server send the random number to browser
+Step4:Store the random number/string in temp storage.
+Step5:For next ajax call we will automatically submit the number/string to server
+Step6.In server. Receive the random number/string and check it. If the random number/string is valid, the rquest valid;otherwise invalid.
+
+//Create a service:
+cmd:ng g service SampleInterceptor
+import { Injectable } from '@angular/core';
+import{HttpInterceptor,HttpRequest,HttpHandler,HttpEvent} from "@angular/common/http";
+import{Observable}from "rxjs";
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SampleInterceptorService implements HttpInterceptor {
+
+  intercept(request:HttpRequest<any>,next:HttpHandler):Observable<HttpEvent<any>>
+  {
+    //HttpRequest is the request send to the server
+    request = request.clone({setHeaders:{"mykey":"100"}});
+    //"clone()" means one more copy of that request.
+    return next.handle(request);
+
+  }
+  constructor() { }
+}
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+app.module
+
+import { HttpClientModule,HTTP_INTERCEPTORS } from '@angular/common/http';
+import { SampleInterceptorService } from './sample-interceptor.service';
+
+@NgModule({
+  declarations: [
+    AppComponent
+
+  ],
+
+  imports: [
+    BrowserModule,AccountModule,HttpClientModule,FormsModule,ReactiveFormsModule,QuestionsModule,myroutes2
+  ],
+  providers: [{provide:HTTP_INTERCEPTORS,useClass:SampleInterceptorService,multi:true}],
+  bootstrap: [AppComponent]
+})
+_________________________________________________________________________________________________________________
+
+87.What is Rxjs?
+//Rxjs is a package developed for running the tasks asynchronously in background, using "Observable pattern".
+//Angular's Ajax was implemented based on Rxjs.
+Example:
+@angular/common/http
+Rxjs
+What are Observable and Observer?
+//Observable is a data source(User event,Http requests,custom data source),which emits data packets to the observer.
+//Observer is an object that subscribes to the observable and listens to the data packets that are sent by observables.
+Observable-------->data packet---------------->Observer.
+Observable means (user Inputs,Http Requests,Custom Data source(array of objects))
+Observer means (Handle Data,Handle Error,Handle Completion)
+//'Handle Data' executes many times. But 'Handle Error' and 'Handle Completion' will execute only one time.
+
+How to create Observable
+
+import{Observable} from "rxjs/Observable";
+import "rxjs/Rx";
+
+1.Observable.interval()
+2.Observable.range()
+3.Observable.from()
+4.Observable.fromEven()
+5.Observable.create()
+6.Subject
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+1.Observable.interval()
+//For every fixed time the data send to the observer.
+
+login.component.ts
+import { Component, OnInit,Inject } from '@angular/core';
+import { LoginService } from '../login.service';
+import{Observable,interval,from,range,Subscription}from 'rxjs';
+
+@Component({
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
+})
+
+export class LoginComponent implements OnInit {
+
+  constructor() {
+       var mynumbers =interval(1000);
+      //var mynumbers = from([10,70,90,100,450,512]);
+     // var mynumbers=range(101,100);
+     //from 101,102,..........200
+
+     //creating user defined observable
+
+     var mynumbers = Observable.create(
+       (observer:Observer)=>{
+         //file1 read
+         observer.next("hello");
+
+         //file2 read
+         observer.next("hai");
+
+       //  observer.error("some error");
+        //It will stop here
+
+       observer.complete("it is completed");
+        observer.next("something more");
+      });
+
+      mynumbers.subscribe((n)=>{
+      console.log(n);
+    },
+    (error)=>{
+      console.log(error);
+    },()=>{
+      console.log("success");
+    });
+  }
+
+  ngOnInit() {
+  }
+}
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Rxjs-Subject
+//Another way to create observables.
+//Easy than Observable.create()
+//Any Subscription always do in "ngOnInit()" not in the constructor.
+
+login.service.ts
+import{Subject} from "rxjs";
+
+export class login{
+
+public getSubject():Subject<any>
+{
+  var mynumbers = new Subject<any>();
+  
+  setTimeout(()=>{
+    mynumbers.next("Hello - from the subject");
+
+
+    mynumbers.next("Hai- from subject");
+
+    mynumbers.complete();
+
+    mynumbers.next("something more");
+  },1000);
+   return mynumbers;
+}
+
+}
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+login.component.ts
+import { Component, OnInit,Inject,OnDestroy } from '@angular/core';
+import { LoginService } from '../login.service';
+import{Observable,interval,from,range,Subscription}from 'rxjs';
+
+@Component({
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
+})
+
+export class LoginComponent implements OnInit,OnDestroy {
+
+    mysubscription:Subscription;
+    //property
+
+  constructor() {
+  }
+
+  ngOnInit() {
+     this.mysubscription = this.s.getSubject().subscribe(
+       (n)=>{
+         console.log(n);
+       },(error)=>{
+         console.log(error);
+       },()=>
+       {
+         console.log("Completed");
+       }
+     );
+     }
+
+     ngOnDestory()
+     {
+       console.log("Unsubscribe");
+       this.mysubscription.unsubscribe();
+     }
+}
+====================================================================================================================
+Advanced Operators in Rxjs:
+1.take(n)
+//First n number of records we can take.
+//Takes "n" records and skips remaining recoreds. "HandleData" will execute "n" no.of times.
+2.skip(n)
+//First n number of records can be skip
+//Skips "n" records and takes only remaining records "HandleData" will execute "total-n" no.of.times
+3.map()
+//To calculation and or extra thing to be added.
+//perform calculations and pass data to "HandleData" function "new data from observable"-->map-->handledata.
+4.filter()
+//Performs condition checking whether the data should be received by "HandleData" or not;It it returns true, then only the "HandleData"
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+1.take(n)
+login.service.ts
+import{Observable,Subject,from}from 'rxjs';
+class LoginService{
+    public getObservable():Observable<any>
+  {
+    var mynumbers = from ([10,70,90,100,450,512]);
+    return mynumbers;
+  }
+}
+
+login.component.ts
+import{Observable,interval,from,range,Subject,Subscription}from 'rxjs';
+import{take}from "rxjs/operators";
+
+export class LoginComponent{
+   mysubscription:Subscription;
+  ngOnInit() {
+    this.mysubscription = this.s.getObservable().pipe(take(3)).subscribe(
+      //pipe means attaching
+      (n)=>{
+        console.log(n);
+      },(error)=>{
+        console.log(error);
+      },()=>
+      {
+        console.log("Completed");
+      }
+    );
+  }
+}
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+2.skip()
+
+login.component.ts
+import{Observable,interval,from,range,Subject,Subscription}from 'rxjs';
+import{skip}from "rxjs/operators";
+
+export class LoginComponent{
+   mysubscription:Subscription;
+  ngOnInit() {
+
+    this.mysubscription = this.s.getObservable().pipe(skip(3)).subscribe(
+      //pipe means attaching
+      (n)=>{
+        console.log(n);
+      },(error)=>{
+        console.log(error);
+      },()=>
+      {
+        console.log("Completed");
+      }
+    );
+
+  }
+}
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+3.map()
+//In map we cannot give the value but we have to give the function.
+//For each individual value the map function will be executed.
+
+login.component.ts
+import{Observable,interval,from,range,Subject,Subscription}from 'rxjs';
+import{map}from "rxjs/operators";
+
+export class LoginComponent{
+   mysubscription:Subscription;
+  ngOnInit() {
+
+    this.mysubscription = this.s.getObservable().pipe(map((p)=>{
+      return p*p;
+    })).subscribe(
+      //pipe means attaching
+      (n)=>{
+        console.log(n);
+      },(error)=>{
+        console.log(error);
+      },()=>
+      {
+        console.log("Completed");
+      }
+    );
+
+
+  }
+}
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+4.Two operators together
+//It will execute sequentially.
+
+login.component.ts
+import{Observable,interval,from,range,Subject,Subscription}from 'rxjs';
+import{skip,map}from "rxjs/operators";
+
+export class LoginComponent{
+   mysubscription:Subscription;
+  ngOnInit() {
+
+    this.mysubscription = this.s.getObservable().pipe(skip(3)).pipe(map((p)=>{
+      return p*p;
+    })).subscribe(
+      //pipe means attaching
+      (n)=>{
+        console.log(n);
+      },(error)=>{
+        console.log(error);
+      },()=>
+      {
+        console.log("Completed");
+      }
+    );
+
+
+  }
+}
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+5.filter
+//filter will return true or false
+
+
+login.component.ts
+import{Observable,interval,from,range,Subject,Subscription}from 'rxjs';
+import{skip,map,filter}from "rxjs/operators";
+
+export class LoginComponent{
+   mysubscription:Subscription;
+  ngOnInit() {
+
+
+    this.mysubscription = this.s.getObservable().pipe(filter((r)=>{
+      if(r<=400)
+      {
+        return true;
+      }
+      else{
+        return false;
+      }
+    })).pipe(map((p)=>{
+      return p*p;
+    })).subscribe(
+      //pipe means attaching
+      (n)=>{
+        console.log(n);
+      },(error)=>{
+        console.log(error);
+      },()=>
+      {
+        console.log("Completed");
+      }
+    );
+
+
+  }
+}
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Ajax call mainly used.
+//For array
+import { Component, OnInit,Inject } from '@angular/core';
+import { QuestionsService } from '../questions.service';
+import{Question} from "../question";
+import{map}from "rxjs/operators";
+@Component({
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css']
+})
+export class HomeComponent implements OnInit {
+
+  questions:Question[]=[];
+
+  constructor(@Inject(QuestionsService)private questionsService:QuestionsService) { }
+
+  ngOnInit() {
+    this.questionsService.getQuestions().pipe(map((data)=>{
+      for(let i=0;i<data.length;i++)
+      {
+        data[i].viewscount = data[i].viewscount+10;
+      }
+      return data;
+    })).subscribe(
+      (response)=>{
+        console.log(response);
+        this.questions=response;
+
+      },
+      (error)=>{
+        console.log(error);
+      });
+  }
+
+}
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//For multiple maps;
+import { Component, OnInit,Inject } from '@angular/core';
+import { QuestionsService } from '../questions.service';
+import{Question} from "../question";
+import{map}from "rxjs/operators";
+@Component({
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css']
+})
+export class HomeComponent implements OnInit {
+
+  questions:Question[]=[];
+
+  constructor(@Inject(QuestionsService)private questionsService:QuestionsService) { }
+
+  ngOnInit() {
+    this.questionsService.getQuestions().pipe(map((data)=>{
+      for(let i=0;i<data.length;i++)
+      {
+        data[i].viewscount = data[i].viewscount+10;
+      }
+      return data;
+    })).pipe(map((data)=>{
+      for(let i=0;i<data.length;i++)
+      {
+        data[i].viewscount = data[i].viewscount+10;
+      }
+      return data;
+    })).pipe(map((data)=>{
+      for(let i=0;i<data.length;i++)
+      {
+        data[i].viewscount = data[i].viewscount+10;
+      }
+      return data;
+    })).subscribe(
+      (response)=>{
+        console.log(response);
+        this.questions=response;
+
+      },
+      (error)=>{
+        console.log(error);
+      });
+  }
+
+}
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Retrying and cancelling the http request.
+-->send req-->res[500]-->retry[another request]
+import { Component, OnInit,Inject } from '@angular/core';
+import { QuestionsService } from '../questions.service';
+import{Question} from "../question";
+import{map,retry}from "rxjs/operators";
+@Component({
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css']
+})
+export class HomeComponent implements OnInit {
+
+  questions:Question[]=[];
+
+  constructor(@Inject(QuestionsService)private questionsService:QuestionsService) { }
+
+  ngOnInit() {
+    this.questionsService.getQuestions().pipe(retry(3)).pipe(map((data)=>{
+      for(let i=0;i<data.length;i++)
+      {
+        data[i].viewcount = data[i].viewcount+10;
+      }
+      return data;
+    })).subscribe(
+      (response)=>{
+        console.log(response);
+        this.questions=response;
+
+      },
+      (error)=>{
+        console.log(error);
+      });
+  }
+
+}
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Cancelling the request
+//unsubscribe()
+login.component.html
+ <input type="button" value="Cancel" (click)="onCancelclick()">
+ login.component.ts
+ import { Component, OnInit,Inject } from '@angular/core';
+import { QuestionsService } from '../questions.service';
+import{Question} from "../question";
+import{map,retry}from "rxjs/operators";
+import { Subscription } from 'rxjs';
+@Component({
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css']
+})
+export class HomeComponent implements OnInit {
+
+  questions:Question[]=[];
+  mysubscription:Subscription;
+  statusMessage:string;
+
+  constructor(@Inject(QuestionsService)private questionsService:QuestionsService) { }
+
+  ngOnInit() {
+    this.statusMessage="Loading...........";
+    this.mysubscription=this.questionsService.getQuestions().pipe(retry(3)).pipe(map((data)=>{
+      for(let i=0;i<data.length;i++)
+      {
+        data[i].viewcount = data[i].viewcount+10;
+      }
+      return data;
+    })).subscribe(
+      (response)=>{
+        console.log(response);
+        this.questions=response;
+
+      },
+      (error)=>{
+        console.log(error);
+      });
+  }
+  onCancelclick()
+  {
+    this.mysubscription.unsubscribe();
+    console.log("unsubscribed");
+    this.statusMessage="unsubcribe";
+  }
+
+}===============================================================================================================================
+90.Route Parameters:
+//Pass value dynamically from browser address bar to the route.
+//The value can be received into the component.
+//The component contains logic to print data based on the parameters.
+Example:
+http://localhost:4200/products/apple-->Depend upon apple the details of the component should change
+//Component[logic for receive the parameter from the route & get relevant data from database]
+product1
+product2
+product3
+product4
+/*Code has some problem*/
+home.component.html
+  <h5><a href="/#/questions/view/{{question._id}}">{{question.questionname}}</a></h5>
+  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+app.module.ts
+var myroutes:Routes=[
+  {path:"home/index",component:HomeComponent},
+  {path:"home/login",component:LoginComponent},
+  {path:"home/register",component:RegisterComponent},
+  {path:"home/category",component:CategoryComponent},
+  {path:"home/contact",component:ContactComponent},
+  {path:"questions/index",component:QuestionIndexComponent},
+  {path:"question/new",component:QuestionsNewComponent},
+  {path:"questions/view/:questionid",component:QuestionsNewComponent}
+];
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+questionnew.component.html
+<div>
+  <h4>Home</h4>
+  <table>
+    <tr>
+      <td>
+        {{currentQuestion.viewcount}}Votes
+      </td>
+      <td>
+        {{currentQuestion.answerscount}}Answer
+      </td>
+      <td>
+          {{currentQuestion.votescount}}Views
+        </td>
+      <td>
+        <h5><a href="/#/questions/view/{{currentQuestion._id}}">{{currentQuestion.questionname}}</a></h5>
+      {{currentQuestion.categoryid}}
+      </td>
+      <td>
+        {{currentQuestion.questiondateandtime | date:"d-M-yyyy"}}
+      </td>
+    </tr>
+
+  </table>
+<a href="/#/questions/view/{{currentQuestion._id-1}}">Prev</a>
+<a href="/#/questions/view/{{currentQuestion._id+1}}">Next</a>
+</div>
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+questionnew.component.ts
+import { Component, OnInit,Inject } from '@angular/core';
+import { QuestionsService } from '../questions.service';
+import { LoginService } from '../login.service';
+import{ActivatedRoute} from '@angular/router';
+import{Question} from '../question';
+
+@Component({
+  selector: 'app-questions-new',
+  templateUrl: './questions-new.component.html',
+  styleUrls: ['./questions-new.component.css']
+})
+export class QuestionsNewComponent implements OnInit {
+
+   currentQuestion:Question;
+
+  constructor(@Inject(ActivatedRoute)private route:ActivatedRoute,@Inject(QuestionsService)private q:QuestionsService,@Inject(LoginService)private s:LoginService) { }
+
+  //ActivatedRoute means current working route.
+  ngOnInit() {
+      //  var qid=this.route.snapshot.params["questionid"];
+      //  console.log(qid);
+       //snapshot means at a time only one value.
+      //User enter "1" there is one snapshot
+
+      this.route.params.subscribe((params)=>{
+        var qid = params["questionid"];
+      this.q.getQuestionsById(qid).subscribe((response:Question)=>{
+        this.currentQuestion = response;
+      },(error)=>{});
+    });
+
+  }
+
+}
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+question.ts
+export class Question {
+
+  _id:number;
+  questionname:string;
+  questiondateandtime:string;
+  userid:string;
+  categoryid:string;
+  viewcount:number;
+  votescount:number;
+  answerscount:number;
+
+  constructor(questionname:string,questiondateandtime:string,userid:string,categoryid:string,viewcount:number,votescount:number,answerscount:number)
+  {
+   this.questionname = questionname;
+   this.questiondateandtime=questiondateandtime;
+   this.userid=userid;
+   this.categoryid=categoryid;
+   this.viewcount=viewcount;
+   this.votescount=votescount;
+   this.answerscount=answerscount;
+  }
+
+
+}
+===================================================================================================================
+91.child Routes
+//The route can have child routes up to unlimited no.of nested levels.
+Example:
+FundsTransfer
+    FundsTransfer/Transfer
+    FundsTransfer/AddPayee
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+app.module.ts
+
+var myroutes:Routes=[
+  {
+    path:"",redirectTo:"/home",pathMatch:"full"
+  },
+  {
+    path:"home",children:[
+      {path:"index",component:HomeComponent},
+      {path:"login",component:LoginComponent},
+      {path:"register",component:RegisterComponent},
+      {path:"category",component:CategoryComponent},
+      {path:"contact",component:ContactComponent}
+    ]
+  },
+  {
+    path:"questions",children:[
+      {path:"index",component:QuestionIndexComponent},
+      {path:"new",component:QuestionsNewComponent},
+      {path:"view/:quesitonid",component:QuestionViewComponent}
+    ]
+  }
+];
+=================================================================================================================
+92.Intro to Guards,CanDeactive Guards
+//The Guard is a service that executes at the specified situation while angular is navigating from one route to another route.
+Types of Guards:
+CanActivate:Execute before entering into the route.
+CanDeativate:Excutes before leaving the route.
+Example:
+User clicks on the hyperlinks---->CanDeactivate Guard for previous Route--->Identify the Next Route--->CanActivate Guard of Next Route-->Component-->Template---Disaplay output of component--->Repeat(User clicks on the hyperlink)
+//"CanDeative" is a special type of service.
+cmd:ng g service SampleCanDeactivateGuard
+cmd:ng g interface CanComponentDeactivate
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+CanComponentDeactivate.ts
+export interface CanComponentDeactivate {
+
+  canNavigate:boolean;
+
+}
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+SampleCanDeactivateGuard.ts
+
+import { Injectable } from '@angular/core';
+import { CanComponentDeactivate } from './can-component-deactivate';
+import{CanDeactivate} from '@angular/router';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SampleCanDeactiveGuardService implements CanDeactivate<CanComponentDeactivate> {
+
+  //"CanComponentDeactivate" is a class
+  //"CanDeactive" is a method
+
+
+  canDeactivate(component:CanComponentDeactivate)
+  {
+    //"component" is a current working reference object
+  if(component.canNavigate == true)
+  {
+    return true;//the current component will be closed & next component gets opened
+  }
+  else{
+    if(confirm("Do you want to discard changes?")==true)
+    {
+      return true;//the current component will be closed & next component gets opened
+    }
+    else{
+      return false;//the navigation gets cancelled
+    }
+  }
+
+  }
+
+  constructor() { }
+}
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+account.module.ts
+import { SampleCanDeactiveGuardService } from '../sample-can-deactive-guard.service';
+@NgModule({
+  providers:[SampleCanDeactiveGuardService]
+})
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+app.module.ts
+import { SampleCanDeactiveGuardService } from './sample-can-deactive-guard.service';
+
+var myroutes:Routes=[
+  {
+    path:"",redirectTo:"/home",pathMatch:"full"
+  },
+  {
+    path:"home",children:[
+      {path:"index",component:HomeComponent},
+      {path:"login",component:LoginComponent},
+      {path:"register",component:RegisterComponent,canDeactivate:[SampleCanDeactiveGuardService]},
+      {path:"category",component:CategoryComponent},
+      {path:"contact",component:ContactComponent}
+    ]
+  },
+  {
+    path:"questions",children:[
+      {path:"index",component:QuestionIndexComponent},
+      {path:"new",component:QuestionsNewComponent},
+      {path:"view/:quesitonid",component:QuestionViewComponent}
+    ]
+  }
+];
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+register.html
+     <input type="text" id="txtEmail" formControlName="email" (change)="onEmailChange()"><br>
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+register.ts
+import { CanComponentDeactivate } from '../can-component-deactivate';
+export class RegisterComponent implements OnInit,CanComponentDeactivate {
+canNavigate:boolean=false;
+
+  onEmailChange()
+  {
+    alert("hello");
+    this.canNavigate=false;
+  }
+}
+===============================================================================================================
+93.CanActivate Guard
+sample-can-activate-guard.service.ts
+
+import { Injectable,Inject } from '@angular/core';
+import { LoginService } from './login.service';
+import{Router,ActivatedRouteSnapshot,CanActivate} from "@angular/router";
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SampleCanActivateGuardService implements CanActivate {
+
+  constructor(@Inject(LoginService) private loginService:LoginService,@Inject(Router)private router:Router) {
+  //Since we have one instance for "LoginService". Whatever change in login.component the same will reflect in this instance also.
+
+   }
+canActivate(route:ActivatedRouteSnapshot):boolean
+{
+  //"route" parameter helsp to identify the current working route.
+  if(this.loginService.loginStatus == true)
+  {
+    console.log("Access allowed");
+    return true;
+  }
+  else{
+    console.log("Access denied");
+    this.router.navigateByUrl("/home/index");
+    return false;
+  }
+}
+
+}
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+app.module
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule, Component } from '@angular/core';
+import { AppComponent } from './app.component';
+import { QuestionIndexComponent } from './question-index/question-index.component';
+import { QuestionViewComponent } from './question-view/question-view.component';
+import { QuestionsNewComponent } from './questions-new/questions-new.component';
+import { AccountModule } from './account/account.module';
+import { QuestionsModule } from './questions/questions.module';
+import { HomeComponent } from './home/home.component';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
+import { CategoryComponent } from './category/category.component';
+import{ReactiveFormsModule,FormsModule} from '@angular/forms';
+import{Routes,RouterModule} from "@angular/router";
+import { ContactComponent } from './contact/contact.component';
+import { DurationPipe } from './duration.pipe';
+import { HttpClientModule } from '@angular/common/http';
+import { QuestionsService } from './questions.service';
+import { SampleCanDeactiveGuardService } from './sample-can-deactive-guard.service';
+import { SampleCanActivateGuardService } from './sample-can-activate-guard.service';
+
+
+
+var myroutes:Routes=[
+  {
+    path:"",redirectTo:"/home",pathMatch:"full"
+  },
+  {
+    path:"home",children:[
+      {path:"index",component:HomeComponent},
+      {path:"login",component:LoginComponent},
+      {path:"register",component:RegisterComponent,canDeactivate:[SampleCanDeactiveGuardService]},
+      {path:"category",component:CategoryComponent,canActivate:[SampleCanActivateGuardService]},
+      {path:"contact",component:ContactComponent,canActivate:[SampleCanActivateGuardService]}
+    ]
+  },
+  {
+    path:"questions",children:[
+      {path:"index",component:QuestionIndexComponent,canActivate:[SampleCanActivateGuardService]},
+      {path:"new",component:QuestionsNewComponent,canActivate:[SampleCanActivateGuardService]},
+      {path:"view/:quesitonid",component:QuestionViewComponent,canActivate:[SampleCanActivateGuardService]}
+    ]
+  }
+]
+];
+var myroutes2 = RouterModule.forRoot(myroutes,{useHash:true});
+
+@NgModule({
+  providers: [QuestionsService,SampleCanActivateGuardService],
+})
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//If you add for parent route automatically is applicable for child.
+Example:
+var myroutes:Routes=[
+  {
+    path:"questions",canActivate:[SampleCanActivateGuardService],children:[
+      {path:"index",component:QuestionIndexComponent},
+      {path:"new",component:QuestionsNewComponent},
+      {path:"view/:quesitonid",component:QuestionViewComponent}
+    ]
+  }
+];
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//To apply for children not for parent then use "canActivateChild"
+var myroutes:Routes=[
+  {
+    path:"questions",component:QuestionIndexComponent,canActivateChild:[SampleCanActivateGuardService],children:[
+      {path:"index",component:QuestionIndexComponent},
+      {path:"new",component:QuestionsNewComponent},
+      {path:"view/:quesitonid",component:QuestionViewComponent}
+    ]
+  }
+];
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+94. Unit Testing 
+//"Unit Testing" means testing the component independently without depending on other component.
+Packages for unit testing:
+1.jasmine:Used to define(create) test cases.
+2.protractor:Used to execute test cases.
+3.Karma:Used to execute test cases in multiple browser. It calls protractor in the browser.
+//Actual test cases are written in question.view.component.
+To start unit test:ng test
+
+function add(a,b)
+{
+  var c = a+b;
+  //var c = a-b;
+  //It will give you error it is not expected as value.
+  return c;
+}
+
+
+function square(n)
+{
+  var n = n* n;
+  return n;
+}
+
+
+it("My sample test case",()=>{
+ var actualResult = add(10,20);
+ var expectedResult = 30;
+ //expectedResult you can give the constant value.
+ expect(actualResult).toBe(expectedResult);
+});
+
+//"it" means defining test case.
+
+it("Square test case",()=>{
+  var actualResult = square(5);
+  var expectedResult = 30;
+  //expectedResult you can give the constant value.
+  expect(actualResult).toBe(expectedResult);
+ });
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+95.Unit Testing on Components in Angular - Part1
+
+login.component.spec.ts
+//we need three modules for testing component
+import { TestBed } from '@angular/core/testing';
+import { FormsModule, NgForm } from '@angular/forms';
+import { LoginComponent } from './login.component';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+
+
+
+describe("Login Component Testing",()=>{
+beforeEach(()=>{
+TestBed.configureTestingModule({
+    declarations:[LoginComponent],
+    imports:[FormsModule,HttpClientModule]
+  }).compileComponents();
+});
+//"beforeEach" will execute before each test cases.
+//we cannot use "AccountModule". So we need the dummy module.
+
+
+it("Login - Success",()=>{
+  var comp=TestBed.createComponent(LoginComponent).componentInstance
+  //"componentInstance" helps to acces the object of logincomponent
+  comp.email="salman.g@tcs.com";
+  comp.password="1234";
+  //It is like typing the value in the text box.
+  comp.onLoginClick(new NgForm([],[]));
+  expect(comp.s.loginStatus).toBe(true);
+
+});
+});
+==============================================================================================================
+97.Animations:
+->The "@angular/animations" package is used to invoke css animations from components.
+->"CSS Animations" is a process of changing css property value gradually based on the specific milli seconds.
+->Ex:"width" changes from "100px" to "300px" in 5 seconds.
+app.module.ts
+import{BrowserAnimationsModule} from "@angular/platform-browser/animations";
+@NgModule({
+  imports: [
+    BrowserAnimationsModule,BrowserModule,AccountModule,HttpClientModule,FormsModule,ReactiveFormsModule,QuestionsModule,myroutes2
+  ]
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+register.component.ts
+import{trigger,state,style,transition,animate} from "@angular/animations";
+var myanimations=[
+trigger("Animations1",[
+  // state("visible",style({opacity:1})),
+  // state("invisible",style({opacity:0})),
+  // state("visible",style({backgroundColor:"green"})),
+  // state("invisible",style({backgroundColor:"red"})),
+  state("visible",style({transform:"scale(1)"})),
+  state("invisible",style({transform:"scale(0)"})),
+  //we can have any number of "state".
+  transition("visible =>invisible",animate("5000ms")),
+  //"transition" helps to move from one state to another state.
+  transition("invisible =>visible",animate("5000ms"))
+])
+//"trigger" is used to invoke the animations
+];
+
+@Component({
+  selector: "app-register",
+  templateUrl: "./register.component.html",
+  styleUrls: ["./register.component.css"],
+  animations:[myanimations]
+  //"animations" is an array so we can have multiple values also.
+})
+export class RegisterComponent implements OnInit,CanComponentDeactivate {
+
+  currentState:string="visible";
+  
+onCloseClick()
+{
+  this.currentState="invisible";
+}
+}
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+register.component.html
+<div id="registerDiv" [@Animations1]="currentState">
+//write the set of code
+</div>
+<input type="button" value="close" (click)="onCloseClick()">
+=================================================================================================================
+98.Angular Material-Basics
+->Angular Material
+-->Set of pre-defined UI components such as buttons,textboxes,checkboxes,radio buttons,dropdownlist,menus,tabs onEditClick
+-->Alternative of Bootstrap.
+
+Packages:
+1.@angular/Material
+2.@angular/cdk 
+3.@angular/animations
+4.hammerjs
+
+package.json
+ "dependencies": {
+    "@angular/animations": "^6.1.0",
+    "@angular/material": "^6.1.0",
+    "@angular/cdk": "^6.1.0",
+    "hammerjs": "2.0.8"
+  },
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+app.module.ts
+import{BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import{MatButtonModule} from "@angular/material";
+
+@NgModule({
+  imports: [
+    MatButtonModule,BrowserAnimationsModule
+  ]
+})
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+questions.module.ts
+import{MatButtonModule} from "@angular/material";
+
+@NgModule({
+  imports: [
+     MatButtonModule
+  ],
+})
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+maint.ts
+import "hammerjs";
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+index.html
+<html>
+<head>
+  <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  </head>
+</html>
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+style.css
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+questionview.html
+<div>
+  <button mat-button>Ok</button>
+</div>
+=====================================================================================================
+99.Angular Material-buttons
+<div>
+  <h5>New Question</h5>
+  <h3>Basic Buttons</h3>
+  <div>
+  <button mat-button>Basic</button>
+  <button mat-button color="primary">Primary</button>
+  <button mat-button color="accent">Accent</button>
+  <button mat-button color="warn">Warn</button>
+  <button mat-button disabled>Disabled</button>
+  <a mat-button routerLink=".">Link</a>
+</div>
+
+<h3>Raised Buttons</h3>
+<div>
+  <button mat-raised-button>Basic</button>
+  <button mat-raised-button color="primary">Primary</button>
+  <button mat-raised-button color="accent">Accent</button>
+  <button mat-raised-button color="warn">Warn</button>
+  <button mat-raised-button disabled>Disabled</button>
+  <a mat-raised-button routerLink=".">Link</a>
+</div>
+
+<h3>Fab Buttons</h3>
+<div>
+  <button mat-fab>Basic</button>
+  <button mat-fab color="primary">Primary</button>
+  <button mat-fab color="accent">Accent</button>
+  <button mat-fab color="warn">Warn</button>
+  <button mat-fab disabled>Disabled</button>
+  <a mat-fab routerLink=".">Link</a>
+</div>
+
+<h3>Mini Fab Buttons</h3>
+<div>
+  <button mat-mini-fab>Basic</button>
+  <button mat-mini-fab color="primary">Primary</button>
+  <button mat-mini-fab color="accent">Accent</button>
+  <button mat-mini-fab color="warn">Warn</button>
+  <button mat-mini-fab disabled>Disabled</button>
+  <a mat-mini-fab routerLink=".">Link</a>
+</div>
+<hr>
+
+<h4>TextBox</h4>
+<mat-form-field>
+  <input matInput placeholder="First name">
+</mat-form-field>
+<br>
+
+<mat-form-field>
+  <input matInput placeholder="Last name">
+</mat-form-field>
+<br>
+
+<mat-form-field>
+  <textarea matInput placeholder="Comment"></textarea>
+</mat-form-field>
+<hr>
+
+<h4>Checkbox</h4>
+<mat-checkbox>Check me!</mat-checkbox>
+
+<hr>
+<h4>RadioButton</h4>
+<mat-radio-group>
+  <mat-radio-button value="1">Option 1</mat-radio-button>
+  <mat-radio-button value="2">Option 2</mat-radio-button>
+</mat-radio-group>
+<hr>
+
+<h4>DropDownList (Select)</h4>
+<mat-form-field>
+  <mat-select placeholder="Bank">
+    <mat-option *ngFor="let bank of banks" [value]="bank.bankshortname">
+      {{ bank.bankfullname }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+<hr>
+
+<h4>AutoComplete</h4>
+<mat-form-field>
+  <input type="text" placeholder="Pick one" matInput formControlName="myControl" [matAutocomplete]="auto">
+  <mat-autocomplete #auto="matAutocomplete">
+    <mat-option *ngFor="let country of countries" [value]="country">
+      {{country}}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>
+<hr>
+
+<h4>DatePicker</h4>
+<mat-form-field>
+  <input matInput [matDatepicker]="picker" placeholder="Choose a date">
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
+</mat-form-field>
+<hr>
+
+<h4>Slide Toggle</h4>
+<mat-slide-toggle (change)="onSlide($event)">Slide me!</mat-slide-toggle>
+<br>
+{{status}}
+<hr>
+
+<h4>Menus</h4>
+<button mat-icon-button [matMenuTriggerFor]="mymenu">
+   <mat-icon>more_vert</mat-icon>
+</button>
+
+<mat-menu #mymenu="matMenu">
+  <button mat-menu-item (click)="onHomeClick()">Home</button>
+  <button mat-menu-item (click)="onAboutClick()">About</button>
+	<button mat-menu-item (click)="onContactClick()">Contact</button>
+</mat-menu>
+
+</div>
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+import { Component } from '@angular/core';
+import { FormControl } from '@angular/forms';
+
+@Component({
+  selector: 'app-questions-new',
+  templateUrl: './questions-new.component.html',
+  styleUrls: ['./questions-new.component.css']
+})
+export class QuestionsNewComponent
+{
+  banks =
+	[
+    { bankshortname: "ICICI", bankfullname: "ICICI Bank" },
+    { bankshortname: "HDFC", bankfullname: "HDFC Bank" },
+    { bankshortname: "SBI", bankfullname: "State Bank of India" }
+  ];
+
+  myControl: FormControl = new FormControl();
+  countries = [ "India", "UK", "USA" ];
+
+  status: boolean;
+
+  onSlide(event)
+  {
+    console.log(event);
+    this.status = event.checked;
+  }
+}
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+app.module.ts
+import{MatIconModule,,MatMenuModule,MatMenuTrigger,MatSlideToggleModule,MatInputModule,MatCheckboxModule,MatRadioModule,MatSelectModule,MatAutocompleteModule,MatDatepickerModule,MaNativeDateModule} from "@angular/material";
+@NgModule({
+  imports:[MatIconModule,MatMenuModule,MatMenuTrigger,MatSlideToggleModule,MatInputModule,MatCheckboxModule,MatRadioModule,MatSelectModule,MatAutocompleteModule,MatDatepickerModule,MaNativeDateModule]
+})
+=====================================================================================================
+Angular Zones:
+//Zone is a memory area.
+//Each component will execute under its each zone.
+//"properties" and "methods" of one component will not share with other component.
+//There is way to share like parent and child relationship by using property binding or services.
+//Any asynchronouse call make that whole component to refresh.
+example:setTimeut/setInterval,JavaScript events,alert,confirm.ajax call finished.
+//only data binding values will be refresh not the static content.
+
+
+code:
+question.new.component.ts
+import{NgZone} from '@angular/core';
+
+export class QuestionIndexComponent{
+  n:number=0;
+
+  constructor(@Inject(NgZone)private zone:NgZone)
+  {
+    this.zone.runOutsideAngular(()=>
+    {
+      setInterval(()=>{
+        this.n=this.n+1;
+        console.log(this.n);
+      },300);
+    });
+  }
+//whenever "event" is there change detection process updates the values of component.
+method1()
+{
+
+}
+}
+question.new.component.html
+<div>
+{{n}}
+<input type="button" value="click me" (click)="method1()">
+</div>
+========================================================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+==================================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

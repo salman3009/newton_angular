@@ -1,0 +1,36 @@
+<div class="container">
+  <form #loginForm="ngForm" (ngSubmit)="onLoginSubmit(loginForm)">
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input type="email" class="form-control" id="email"  pattern="[0-9a-zA-Z]{5,20}"   name="email" ngModel #emailId="ngModel" required>
+      <div *ngIf="emailId.invalid &&emailId.touched&& emailId.errors.required" class="alert alert-danger">
+        Email cannot be blank
+      </div>
+      <div *ngIf="emailId.invalid && emailId.touched && emailId.errors.pattern" class="alert alert-danger">
+        Minimum length is 5 only number and alphabet is allowed
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="email">password:</label>
+      <input type="text" class="form-control" pattern="[a-z]{6,60}" ngModel #password="ngModel" id="password"  name="password" minlength="4" maxlength="10" required>
+      <div *ngIf="password.invalid &&password.touched&& password.errors.minlength" class="alert alert-danger">
+        minlength should be three
+      </div>
+      <div *ngIf="password.invalid &&password.touched&& password.errors.maxlength" class="alert alert-danger">
+        maxlength should be three
+      </div>
+      <div *ngIf="password.invalid &&password.touched&& password.errors.required" class="alert alert-danger">
+        The data is needed
+      </div>
+      <div *ngIf="password.invalid &&password.touched&& password.errors.pattern" class="alert alert-danger">
+        The data is needed
+      </div>
+    </div>
+  
+   
+ 
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+ 
+</div>

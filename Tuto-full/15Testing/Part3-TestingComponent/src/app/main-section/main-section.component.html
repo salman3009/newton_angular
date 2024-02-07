@@ -1,0 +1,20 @@
+<nav class="navbar bg-dark">
+  <h1>
+    <a routerLink="/landing"><i class="fas fa-code"></i> DeveloperConnect</a>
+  </h1>
+  <ul>
+    <li><a routerLink="/dashboard">Dashboard</a></li>
+    <li><a routerLink="/developer">Profile</a></li>
+    <li><a routerLink="">Logout</a></li>
+  </ul>
+</nav>
+
+<section class="container">
+    <h1 class="large text-primary">{{todayDate | date:"d/M/y"}}</h1>
+    <p class="lead">
+      <i class="fab fa-connectdevelop"></i> Browse and connect with developers
+    </p>
+    <div class="profiles">
+        <app-list-section></app-list-section>
+    </div>
+  </section>

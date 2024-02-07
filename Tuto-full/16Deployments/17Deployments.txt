@@ -1,0 +1,4 @@
+Deployments:
+1.npm install -g http-server
+2.then moved to the dist/project-folder and tried with
+cmd:http-server -o

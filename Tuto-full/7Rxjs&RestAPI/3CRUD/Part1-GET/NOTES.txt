@@ -1,0 +1,27 @@
+import { HttpClientModule} from "@angular/common/http";
+==========================================================
+Service Layer:
+import { HttpClient } from "@angular/common/http";
+
+constructor(private http:HttpClient) {
+
+}
+
+GET METHOD:
+getDeveloperList(){
+return this.http.get("https://jsonplaceholder.typicode.com/posts");
+}
+=============================================================
+Landing component:
+import {GlobalProfileService} from '../global-profile.service';
+
+  constructor(global:GlobalProfileService) { 
+
+  }
+
+  ngOnInit(): void {
+    this.global.getDeveloperList().subscribe((response)=>{
+           console.log(response);
+    })   q
+  }
+=====================================================================

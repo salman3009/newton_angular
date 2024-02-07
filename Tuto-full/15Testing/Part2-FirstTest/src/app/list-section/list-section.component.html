@@ -1,0 +1,40 @@
+
+<!-- <div [ngSwitch]="year">
+<div *ngSWitchCase="'2019'" style="color:red">Welcome to {{year}}</div>
+<div *ngSWitchCase="'2020'" style="color:blue">Welcome to {{year}}</div>
+<div *ngSWitchCase="'2021'" style="color:green">Welcome to {{year}}</div>
+<div *ngSWitchDefault style="color:black">Welcome to {{year}}</div>
+</div> -->
+
+<container-element [ngSwitch]="year">
+  <some-element *ngSwitchCase="'2020'" style="color:red">2020</some-element>
+  <some-element *ngSwitchDefault>default</some-element>
+</container-element>
+
+<div *ngFor="let obj of developerList;index as i">
+  {{i}}
+  <div class="profile bg-light">
+    <img
+      class="round-img"
+      [src]="obj.imagePath"
+      alt=""
+    />
+    <div>
+      <h2>{{obj.name}}</h2>
+      <p>{{obj.occupation}}</p>
+      <p>{{obj.location}}</p>
+      <a (click)="onViewProfile(i)" class="btn btn-primary">View Profile</a>
+    </div>
+
+    <ul >
+      <li *ngFor="let i of obj.skills" class="text-primary">
+        <i class="fas fa-check"></i> {{i}}
+      </li>
+   
+    </ul>
+  </div>
+</div>
+
+
+
+ 

@@ -1,0 +1,54 @@
+<div class="container">
+  <div class="row">
+    <div class="col-3">
+
+    </div>
+    <div class="col-6">
+      <form [formGroup]="signUpForm" (ngSubmit)="onSubmitClick()">
+
+        <div class="card mt-1">
+          <div class="card-header">
+            <h4>Sign Up</h4>
+          </div>
+  
+          <div class="card-body">  
+            <div class="form-group form-row" >
+              <label for="firstName" class="col-md-4 col-form-label">First Name:</label>
+              <div class="col-md-8">
+                <input type="text" name="firstName" id="firstName" placeholder="First Name" class="form-control" formControlName="firstName">
+                <span class="text-danger" *ngIf="signUpForm.get('firstName').invalid && (signUpForm.get('firstName').dirty || signUpForm.get('firstName').touched || signUpForm.submitt) && signUpForm.get('firstName').errors?.required">name can't be blank</span>
+
+              <span class="text-danger" *ngIf="signUpForm.get('firstName').invalid && (signUpForm.get('firstName').dirty || signUpForm.get('firstName').touched || signUpForm.submitt) && signUpForm.get('firstName').errors?.minlength">name should contain at least 2 characters</span>
+              </div>
+            </div>
+            <div class="form-group form-row">
+              <label for="email" class="col-md-4 col-form-label">Email:</label>
+              <div class="col-md-8">
+                <input type="text" name="email" id="email" placeholder="Email" class="form-control" formControlName="email">
+              </div>
+              <span class="text-danger" *ngIf="signUpForm.get('email').invalid && (signUpForm.get('email').dirty || signUpForm.get('email').touched || signUpForm.submitt) && signUpForm.get('email').errors?.required">Email can't be blank</span>
+
+              <span class="text-danger" *ngIf="signUpForm.get('email').invalid && (signUpForm.get('email').dirty || signUpForm.get('email').touched || signUpForm.submitt) && signUpForm.get('email').errors?.email">Email is invalid</span>
+            </div>
+            <div class="form-group form-row">
+              <label for="mobile" class="col-md-4 col-form-label">Mobile:</label>
+              <div class="col-md-8">
+                <input type="text" name="mobile" id="mobile" placeholder="Mobile" class="form-control" formControlName="mobile">
+              </div>
+              <span class="text-danger" *ngIf="signUpForm.get('mobile').invalid && (signUpForm.get('mobile').dirty || signUpForm.get('mobile').touched || signUpForm.submitt) && signUpForm.get('mobile').errors?.required">Mobile can't be blank</span>
+
+              <span class="text-danger" *ngIf="signUpForm.get('mobile').invalid && (signUpForm.get('mobile').dirty || signUpForm.get('mobile').touched || signUpForm.submitt) && signUpForm.get('mobile').errors?.pattern">Mobile is invalid</span>
+            </div>
+            {{signUpForm.value | json}}
+          </div>
+          <div class="card-footer">
+            <button class="btn btn-success float-right">Create Account</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-3">
+
+    </div>
+  </div>
+</div>

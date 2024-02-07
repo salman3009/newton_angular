@@ -1,0 +1,11 @@
+
+<div *ngFor="let obj of ProjectDetails;let i=index">
+    <app-child (editClick)="parentShow($event)" [projectDetails]="obj" [nameDetails]="fullName"></app-child>
+</div>
+
+
+
+<app-grandchild *ngIf="status">
+
+</app-grandchild>
+

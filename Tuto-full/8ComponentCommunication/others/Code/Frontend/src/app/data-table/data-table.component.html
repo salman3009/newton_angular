@@ -1,0 +1,100 @@
+<div class="container">
+  <br>
+  <span>{{currentDate | date:'h:m:s'}}</span>
+  <br>
+  <div [ngSwitch]="dietSelection">
+    <p *ngSwitchCase="'sf'">sugar-free</p>
+    <p *ngSwitchCase="'veg'">Vegetable</p>
+    <p *ngSwitchCase="'paleo'">bread</p>
+    <p *ngSwitchDefault>Standard diet</p>
+  </div>
+  <form>
+    <div class="form-group">
+      <label for="firstName">FirstName:</label>
+      <input type="email" class="form-control" id="FirstName" (change)="emailCheck()" name="FirstName" [(ngModel)]="firstNameData">
+                <div *ngIf="firstnameError">
+                  derodfdfadsf
+                </div>
+    </div>
+    <div class="form-group">
+      <label for="lastName">LastName:</label>
+      <input type="text" class="form-control" id="LastName" name="LastName" [(ngModel)]="lastNameData">
+    </div>
+    <div class="form-group">
+      <label for="emailID">EmailId:</label>
+      <input type="text" class="form-control" id="EmailId" name="EmailId" [(ngModel)]="emailData">
+    </div>
+    <button type="submit" class="btn btn-primary" (click)="call()">Submit</button>
+  </form>
+  <br>
+
+  <span *ngIf="welcomeFlag;then firstTemplate;else secondTemplate">
+  </span>
+   <ng-template #firstTemplate>
+      <span>First Template</span>
+    </ng-template>
+   
+    <ng-template #secondTemplate>
+        <span>Second template</span>
+    </ng-template>
+
+  <table class="table table-dark table-hover">
+    <thead>
+      <tr>
+        <th>{{firstName}}</th>
+        <th>{{lastName}}</th>
+        <th>{{email}}</th>
+        <th>Delete</th>
+        <th>Update</th>
+      </tr>
+    </thead>
+    <tbody >
+      <tr *ngFor="let i of dataTableArray;let j=index">
+        <td [ngClass]="(j==1)?'show':''"> {{i.firstName}}   {{j}}</td>
+        <td [style.color]="i.name=='salman'?'blue':'orange'">{{i.lastName}}</td>
+        <td>{{i.emailId}}</td>
+        <td><button (click)="deleteBookingData(j)">Delete</button></td>
+        <td><button type="button" (click)="getUpdateId(j)" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Update</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="modal" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Modal Heading</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      
+      <!-- Modal body -->
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="firstName">FirstName:</label>
+            <input type="email" class="form-control" id="FirstName" name="FirstName" [(ngModel)]="firstNameData">
+                      
+          </div>
+          <div class="form-group">
+            <label for="lastName">LastName:</label>
+            <input type="text" class="form-control" id="LastName" name="LastName" [(ngModel)]="lastNameData">
+          </div>
+          <div class="form-group">
+            <label for="emailID">EmailId:</label>
+            <input type="text" class="form-control" id="EmailId" name="EmailId" [(ngModel)]="emailData">
+          </div>
+          <button type="submit" class="btn btn-primary" data-dismiss="modal" (click)="updateCallData()">Submit</button>
+        </form>
+      </div>
+      
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+      
+    </div>
+  </div>
+</div>

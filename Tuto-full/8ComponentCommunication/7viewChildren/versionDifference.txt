@@ -1,0 +1,12 @@
+version 11:
+  @ViewChild("prj") prj:ListComponent;
+  getListDetails(){
+    this.prj.onDelete(2);
+  }
+===============================================  
+version 13:
+  @ViewChild("prj") prj!:ListComponent;
+  getListDetails(){
+    this.prj.onDelete(2);
+  }  
+================================================  

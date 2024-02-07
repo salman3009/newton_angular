@@ -1,0 +1,80 @@
+<!-- Parent to child child-input binding -->
+<!-- <div class="row">
+  <div class="col-12">
+    <div *ngFor="let project of projectDetails;let i=index">
+        <app-child [projectData]="project" [recordIndex]="i"></app-child>
+    </div>
+  </div>
+</div> -->
+
+<!-- child to parent - output binding custom events -->
+<!-- <div class="row">
+  <div class="col-12">
+    <div *ngFor="let project of projectDetails;let i=index">
+        <app-child (editClick)="onEditClick(event,i)"[projectData]="project" [recordIndex]="i"></app-child>
+    </div>
+  </div>
+</div> -->
+
+<!-- parent to child- view child -->
+<!-- <div class="row">
+  <div class="col-12">
+    <div *ngFor="let project of projectDetails;let i=index">
+        <app-child #prj (editClick)="onEditClick(event,i)"[projectData]="project" [recordIndex]="i"></app-child>
+    </div>
+  </div>
+</div>
+
+<button class="btn btn-seconday" (click)="onHideShowDetails($event)">
+  show/hide Details
+</button> -->
+
+<!-- Passing content from parent to child -->
+<!-- <div class="row">
+  <div class="col-12">
+    <div *ngFor="let project of projectDetails;let i=index">
+        <app-child #prj (editClick)="onEditClick(event,i)"[projectData]="project" [recordIndex]="i">
+          <p>Passing value to child component</p>
+        </app-child>
+    </div>
+  </div>
+</div> -->
+
+<!-- passing from child to grandchild -->
+
+<input type="checkbox" value="true" name="isAllchecked" id="isAllchecked"
+[(ngModel)]="isAllchecked" (change)="isAllcheckedChange($event)">
+<label>checkbox</label>
+<div class="row">
+  <div class="col-12">
+    <div *ngFor="let project of projectDetails;let i=index">
+        <app-child #prj (editClick)="onEditClick(event,i)"[projectData]="project" [recordIndex]="i">
+         <app-grandchild #selectionbox></app-grandchild>
+        </app-child>
+    </div>
+  </div>
+</div> 
+
+<!-- Elementref -->
+<!-- <button (click)="elementref()">Elementref</button>
+<input type="text" #prj> -->
+
+
+<!-- pipe -->
+<!-- <p>{{people | numberToWords}}</p> -->
+
+<!-- async pipe -->
+<!-- <div *ngFor="let pr of clientLocation |async">
+  <p>{{pr}}</p>
+</div> -->
+
+
+<!-- Directives -->
+<!-- <div appAlert></div>
+<div appAlert></div>
+<div appAlert></div> -->
+
+
+<!-- 
+Structural Directives -->
+<!-- <div *appRepeater="let i">{{i}}</div> -->

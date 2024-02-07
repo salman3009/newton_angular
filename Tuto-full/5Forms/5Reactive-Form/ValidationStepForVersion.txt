@@ -1,0 +1,7 @@
+angular 11
+ <div   *ngIf="f.username.errors?.required" class="alert alert-danger">
+            username is required
+        </div>
+
+//angular 13 
+ <div *ngIf="f['fullname'].errors?.['required']">Fullname is required</div>

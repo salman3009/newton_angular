@@ -1,0 +1,5 @@
+Directives:
+Attribute directive: Changes appearance by adding some logic to it.
+Example:ngClass,ngStyle
+Structure Directive: Changing the DOM elements
+Example:ngFor,ngIf,ngSwitch

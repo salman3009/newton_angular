@@ -1,0 +1,35 @@
+Okay
+hi
+Akil answer is there
+can you check this site
+?
+hey
+i checked the same
+i was going to ping you
+https://stackoverflow.com/questions/45772221/nodemailer-with-zoho-mail
+
+
+we need to give the mail address and passowrd
+one email we can use as
+info@driveurad.com
+to
+marketing@driveurad.com
+Sep@2018
+
+name  akhil
+email ak@ak.com
+content : test
+
+to : marketing@driveurad.com
+from info@driveurad.com
+subject : Enquiry Mail From : ak@ak.com
+Dear Team,
+
+test
+
+Regards,
+Akhil
+
+
+
+

@@ -1,0 +1,13 @@
+1.ng new angular-material
+2.ng add @angular/material
+3.app.module.ts
+import { MatSliderModule } from '@angular/material/slider';
+…
+@NgModule ({....
+  imports: [...,
+  MatSliderModule,
+…]
+})
+4.app.component.html
+<mat-slider min="1" max="100" step="1" value="1"></mat-slider>
+==========================================================
